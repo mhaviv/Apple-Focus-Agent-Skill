@@ -99,8 +99,10 @@ $apple-focus-pro Check my SwiftUI code for focus anti-patterns
 ```
 
 ### Cursor
-Reference the skill in chat or use natural language:
-> Use the Apple Focus Pro skill to audit my project for focus management problems
+```
+/apple-focus-pro Review this view for tvOS focus issues
+```
+Or reference the skill naturally in chat.
 
 ### Gemini CLI
 ```
