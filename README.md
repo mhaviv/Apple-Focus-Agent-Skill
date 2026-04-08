@@ -39,10 +39,12 @@ Works with [Claude Code](https://claude.ai/code), [Codex](https://openai.com/cod
 ### Claude Code
 
 ```bash
+# Global (all projects)
 npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-focus-pro -g -y
-```
 
-Drop `-g` for project-level only.
+# Project-level only
+npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-focus-pro -y
+```
 
 ### Codex
 
