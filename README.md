@@ -39,49 +39,51 @@ Works with [Claude Code](https://claude.ai/code), [Codex](https://openai.com/cod
 ### Claude Code
 
 ```bash
-# Project-level (recommended)
-npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-focus-pro
-
-# Global (all projects)
-npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-focus-pro -g
-
-# Non-interactive
 npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-focus-pro -g -y
 ```
 
+Drop `-g` for project-level only.
+
 ### Codex
 
+Clone into your Codex agents directory:
+
 ```bash
-npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-focus-pro --agent codex
+git clone https://github.com/mhaviv/Apple-Focus-Agent-Skill.git
+cp -r Apple-Focus-Agent-Skill/apple-focus-pro ~/.codex/agents/apple-focus-pro
 ```
 
 ### Cursor
 
-```bash
-npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-focus-pro --agent cursor
-```
+Copy the skill into your project's Cursor rules:
 
-Or manually copy the skill's `SKILL.md` and `references/` directory into `.cursor/rules/` in your project.
+```bash
+git clone https://github.com/mhaviv/Apple-Focus-Agent-Skill.git
+cp -r Apple-Focus-Agent-Skill/apple-focus-pro/SKILL.md .cursor/rules/apple-focus-pro.md
+cp -r Apple-Focus-Agent-Skill/apple-focus-pro/references .cursor/rules/apple-focus-pro-references
+```
 
 ### Gemini CLI
 
+Copy the skill into your Gemini configuration:
+
 ```bash
-npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-focus-pro --agent gemini
+git clone https://github.com/mhaviv/Apple-Focus-Agent-Skill.git
+cp -r Apple-Focus-Agent-Skill/apple-focus-pro ~/.gemini/skills/apple-focus-pro
+```
+
+### Xcode
+
+Xcode's AI assistant can use agent skills when placed in your project directory. Add the skill files to your repo root:
+
+```bash
+git clone https://github.com/mhaviv/Apple-Focus-Agent-Skill.git
+cp -r Apple-Focus-Agent-Skill/apple-focus-pro .apple-focus-pro
 ```
 
 ### Other Agents
 
-Any agent that supports the [Agent Skills](https://agentskills.io) format can use this skill. Copy `SKILL.md` and the `references/` directory into your agent's skill/rules directory.
-
-<details>
-<summary>Don't have Node installed?</summary>
-
-```bash
-brew install node
-```
-
-Or download from [nodejs.org](https://nodejs.org).
-</details>
+Any agent that supports the [Agent Skills](https://agentskills.io) format can use this skill. Clone the repo and copy `apple-focus-pro/SKILL.md` and `apple-focus-pro/references/` into your agent's skill or rules directory.
 
 ## Using
 
