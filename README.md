@@ -48,44 +48,25 @@ npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-f
 
 ### Codex
 
-Clone into your Codex agents directory:
-
 ```bash
-git clone https://github.com/mhaviv/Apple-Focus-Agent-Skill.git
-cp -r Apple-Focus-Agent-Skill/apple-focus-pro ~/.codex/agents/apple-focus-pro
+npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-focus-pro --agent codex
 ```
 
 ### Cursor
 
-Copy the skill into your project's Cursor rules:
-
 ```bash
-git clone https://github.com/mhaviv/Apple-Focus-Agent-Skill.git
-cp -r Apple-Focus-Agent-Skill/apple-focus-pro/SKILL.md .cursor/rules/apple-focus-pro.md
-cp -r Apple-Focus-Agent-Skill/apple-focus-pro/references .cursor/rules/apple-focus-pro-references
+npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-focus-pro --agent cursor
 ```
 
 ### Gemini CLI
 
-Copy the skill into your Gemini configuration:
-
 ```bash
-git clone https://github.com/mhaviv/Apple-Focus-Agent-Skill.git
-cp -r Apple-Focus-Agent-Skill/apple-focus-pro ~/.gemini/skills/apple-focus-pro
-```
-
-### Xcode
-
-Xcode's AI assistant can use agent skills when placed in your project directory. Add the skill files to your repo root:
-
-```bash
-git clone https://github.com/mhaviv/Apple-Focus-Agent-Skill.git
-cp -r Apple-Focus-Agent-Skill/apple-focus-pro .apple-focus-pro
+npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-focus-pro --agent gemini
 ```
 
 ### Other Agents
 
-Any agent that supports the [Agent Skills](https://agentskills.io) format can use this skill. Clone the repo and copy `apple-focus-pro/SKILL.md` and `apple-focus-pro/references/` into your agent's skill or rules directory.
+Any agent that supports the [Agent Skills](https://agentskills.io) format can use this skill. See [agentskills.io](https://agentskills.io) for instructions on adding skills to your agent.
 
 ## Using
 
