@@ -32,7 +32,20 @@ Apple Focus Pro is a free, open-source agent skill that helps AI coding assistan
 
 Built from real-world experience shipping production tvOS apps, Apple developer documentation, WWDC sessions (2017-2025), and community best practices from Airbnb, Showmax, and others.
 
-Works with [Claude Code](https://claude.ai/code), [Codex](https://openai.com/codex), [Cursor](https://cursor.sh), [Gemini CLI](https://github.com/google-gemini/gemini-cli), and any tool supporting the [Agent Skills](https://agentskills.io) format.
+Works with [Claude Code](https://claude.ai/code), [Codex](https://openai.com/codex), [Cursor](https://cursor.sh), [GitHub Copilot](https://github.com/features/copilot), [Gemini CLI](https://github.com/google-gemini/gemini-cli), and any tool supporting the [Agent Skills](https://agentskills.io) format.
+
+## Table of Contents
+
+- [Who This Is For](#who-this-is-for)
+- [Why Use an Agent Skill for Focus?](#why-use-an-agent-skill-for-focus)
+- [Complementary Skills](#complementary-skills)
+- [Installing](#installing)
+- [Using](#using)
+- [What It Covers](#what-it-covers)
+- [Anti-Patterns It Catches](#anti-patterns-it-catches)
+- [Sources](#sources)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Who This Is For
 
@@ -85,6 +98,12 @@ npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-f
 npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-focus-pro --agent cursor
 ```
 
+### GitHub Copilot
+
+```bash
+npx skills add https://github.com/mhaviv/Apple-Focus-Agent-Skill --skill apple-focus-pro --agent github-copilot
+```
+
 ### Gemini CLI
 
 ```bash
@@ -122,6 +141,11 @@ $apple-focus-pro Check my SwiftUI code for focus anti-patterns
 /apple-focus-pro Review this view for tvOS focus issues
 ```
 
+### GitHub Copilot
+```
+Use the apple-focus-pro skill to review my focus handling code
+```
+
 ### Gemini CLI
 ```
 Use the apple-focus-pro skill to review my focus handling code
@@ -156,18 +180,29 @@ Use the apple-focus-pro skill to review my focus handling code
 | **layout-patterns.md** | tvOS | Table-of-collections, sidebar+content, tab bar, hero+catalog |
 | **debugging.md** | All | UIFocusDebugger, _whyIsThisViewNotFocusable, launch arguments |
 
-### Key Anti-Patterns It Catches
+## Anti-Patterns It Catches
 
-- `.disabled()` on tvOS removes views from the focus chain (use `.allowsHitTesting(false)`)
-- Missing `.focusSection()` on horizontal ScrollViews causes cross-row focus jumping
-- Adding `.focusable()` to Buttons creates double-focus artifacts
-- `onHover(perform:)` does NOT fire from eye gaze on visionOS
-- `.focusable()` MUST come before `.digitalCrownRotation()` on watchOS
-- `focusGroupIdentifier` is iOS-only (not available on tvOS)
-- `setNeedsFocusUpdate()` silently fails when called from wrong environment
-- And 7 more...
+### Blocking (must fix before ship)
 
-### Sources
+1. **`.disabled()` removes views from the focus chain on tvOS** — use `.allowsHitTesting(false)` instead
+2. **Missing `.focusSection()` on horizontal ScrollViews** — causes cross-row focus jumping in vertical layouts
+3. **Adding `.focusable()` to Buttons or NavigationLinks** — creates double-focus artifacts
+4. **Mixing SwiftUI and UIKit focus in the same hierarchy** — focus environment conflicts
+5. **Calling `reloadData()` during animations** — focus resets to the top of the screen
+6. **Using `frame.width` in focus transform calculations** — dimensions change when focused
+7. **`setNeedsFocusUpdate()` called from wrong environment** — silently fails with no error
+8. **Setting `isUserInteractionEnabled = false` on headers/labels** — removes them and their children from focus chain
+9. **`remembersLastFocusedIndexPath` + offscreen `reloadData()`** — remembered index may no longer exist
+10. **Using `UIView.animate` for CALayer properties** — animations won't work, use `CABasicAnimation`
+
+### Warning (should fix)
+
+11. **Non-optional `@FocusState` with `focused(_:equals:)`** — can't represent "nothing focused" state
+12. **Missing `prepareForReuse()` cleanup for focus state** — stale focus styling on reused cells
+13. **`prefersDefaultFocus` inside ScrollView** — may not work as expected, use `defaultFocus` instead
+14. **LazyVStack/LazyVGrid performance on Apple TV HD** — A8 chip can't handle lazy layout recalculation during fast scrolling
+
+## Sources
 
 Built from:
 - Apple Developer Documentation (UIFocusEnvironment, UIFocusGuide, FocusState, focusSection, HoverEffect)
