@@ -2,9 +2,7 @@
   <img src="assets/logo.svg" height="180" alt="Swift FocusEngine Pro" />
 </p>
 
-<p align="center">
-  <strong>Agent skill for focus management across all Apple platforms</strong>
-</p>
+<h3 align="center">Agent skill for focus management across all Apple platforms</h3>
 
 <p align="center">
   <img src="https://img.shields.io/badge/tvOS-15+-000000?logo=apple" />
