@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
   <defs>
     <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" />
@@ -9,27 +9,35 @@
       <stop offset="50%" style="stop-color:#007AFF;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#AF52DE;stop-opacity:1" />
     </linearGradient>
+    <linearGradient id="btnGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#5856D6;stop-opacity:1" />
+    </linearGradient>
   </defs>
 
   <!-- Background -->
-  <rect width="1280" height="640" fill="#1a1a2e"/>
+  <rect width="1200" height="630" fill="#000000"/>
 
   <!-- Everything centered as a group -->
-  <g transform="translate(640, 320)">
-    <!-- Focus ring icon — offset left from center -->
+  <g transform="translate(600, 280)">
+    <!-- Focus ring icon -->
     <g transform="translate(-280, 0)">
-      <circle cx="0" cy="0" r="95" stroke="url(#ring)" stroke-width="14" fill="none" opacity="0.9"/>
-      <circle cx="0" cy="0" r="65" stroke="url(#ring)" stroke-width="7" fill="none" opacity="0.5"/>
-      <circle cx="0" cy="0" r="20" fill="url(#grad)"/>
-      <line x1="0" y1="-115" x2="0" y2="-75" stroke="url(#ring)" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
-      <line x1="0" y1="75" x2="0" y2="115" stroke="url(#ring)" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
-      <line x1="-115" y1="0" x2="-75" y2="0" stroke="url(#ring)" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
-      <line x1="75" y1="0" x2="115" y2="0" stroke="url(#ring)" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+      <circle cx="0" cy="0" r="90" stroke="url(#ring)" stroke-width="13" fill="none" opacity="0.9"/>
+      <circle cx="0" cy="0" r="62" stroke="url(#ring)" stroke-width="6" fill="none" opacity="0.5"/>
+      <circle cx="0" cy="0" r="19" fill="url(#grad)"/>
+      <line x1="0" y1="-108" x2="0" y2="-72" stroke="url(#ring)" stroke-width="5.5" stroke-linecap="round" opacity="0.7"/>
+      <line x1="0" y1="72" x2="0" y2="108" stroke="url(#ring)" stroke-width="5.5" stroke-linecap="round" opacity="0.7"/>
+      <line x1="-108" y1="0" x2="-72" y2="0" stroke="url(#ring)" stroke-width="5.5" stroke-linecap="round" opacity="0.7"/>
+      <line x1="72" y1="0" x2="108" y2="0" stroke="url(#ring)" stroke-width="5.5" stroke-linecap="round" opacity="0.7"/>
     </g>
 
-    <!-- Text — offset right from center -->
-    <text x="-140" y="-20" font-family="-apple-system, SF Pro Display, Helvetica Neue, sans-serif" font-size="72" font-weight="700" fill="url(#grad)">Swift FocusEngine</text>
-    <text x="-140" y="60" font-family="-apple-system, SF Pro Display, Helvetica Neue, sans-serif" font-size="56" font-weight="500" fill="url(#grad)">Pro</text>
-    <text x="-40" y="60" font-family="-apple-system, SF Pro Display, Helvetica Neue, sans-serif" font-size="36" font-weight="400" fill="#86868B">Agent Skill</text>
+    <!-- Title -->
+    <text x="-140" y="-30" font-family="-apple-system, SF Pro Display, Helvetica Neue, sans-serif" font-size="68" font-weight="700" fill="url(#grad)">Swift FocusEngine</text>
+    <text x="-140" y="45" font-family="-apple-system, SF Pro Display, Helvetica Neue, sans-serif" font-size="52" font-weight="500" fill="url(#grad)">Pro</text>
+    <text x="-40" y="45" font-family="-apple-system, SF Pro Display, Helvetica Neue, sans-serif" font-size="34" font-weight="400" fill="#86868B">Agent Skill</text>
   </g>
+
+  <!-- Headline / tagline -->
+  <text x="600" y="440" font-family="-apple-system, SF Pro Display, Helvetica Neue, sans-serif" font-size="22" font-weight="400" fill="#a0a0b0" text-anchor="middle">Focus management for tvOS, iOS, watchOS, and visionOS</text>
+
 </svg>
