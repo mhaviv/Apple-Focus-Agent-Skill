@@ -22,6 +22,9 @@
   <a href="https://github.com/twostraws/Swift-Agent-Skills">
     <img src="https://img.shields.io/badge/Swift_Agent_Skills-Listed-F05138?logo=swift&logoColor=white" />
   </a>
+  <a href="https://www.awesomeskills.dev/en/skill/mhaviv-swift-focusengine-agent-skill">
+    <img src="https://img.shields.io/badge/awesomeskills.dev-Listed-10B981" />
+  </a>
   <a href="https://github.com/mhaviv/Swift-FocusEngine-Agent-Skill/stargazers">
     <img src="https://img.shields.io/github/stars/mhaviv/Swift-FocusEngine-Agent-Skill?style=flat&logo=github&label=Stars" />
   </a>
