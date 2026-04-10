@@ -2,7 +2,7 @@
 
 All notable changes to Swift FocusEngine Pro are documented here.
 
-## [1.3.1] - 2026-04-10
+## [1.4.0] - 2026-04-10
 
 ### Added
 - **3 new tvOS anti-patterns from production** (#15–17) — `LazyVStack` focus escape, vertical `.focusSection()`, allocation in focus callbacks
