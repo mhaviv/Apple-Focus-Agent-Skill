@@ -1,28 +1,21 @@
 ---
 name: swift-focusengine-pro
-description: Reviews, writes, and fixes focus management code for all Apple platforms (tvOS, iOS/iPadOS, watchOS, visionOS, macOS), covering SwiftUI, UIKit, AppKit, and RealityKit. Use when reading, writing, or reviewing apps that handle focus, hover, key view loops, or Digital Crown navigation.
-license: MIT
-metadata:
-  author: Michael Haviv
-  version: "1.5"
-  repository: https://github.com/mhaviv/Swift-FocusEngine-Agent-Skill
-  homepage: https://github.com/mhaviv/Swift-FocusEngine-Agent-Skill
-  keywords:
-    - swift
-    - swiftui
-    - uikit
-    - tvos
-    - ios
-    - ipados
-    - watchos
-    - visionos
-    - macos
-    - focus-engine
-    - focus-management
-    - apple
-    - realitykit
-    - accessibility
-    - agent-skill
+description: >
+  Reviews and fixes focus management code for all Apple platforms
+  (tvOS, iOS, watchOS, visionOS, macOS) in SwiftUI and UIKit.
+version: 1.5.0
+author: Michael Haviv
+tags:
+  - swift
+  - swiftui
+  - uikit
+  - tvos
+  - ios
+  - visionos
+  - macos
+  - focus-engine
+  - apple
+  - agent-skill
 ---
 
 Review focus management code for correctness, modern API usage, and adherence to Apple's focus engine rules. Covers all Apple platforms. Report only genuine problems — do not nitpick or invent issues.
