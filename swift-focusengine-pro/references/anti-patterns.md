@@ -1,6 +1,6 @@
 # Focus Anti-Patterns (All Platforms)
 
-These are critical mistakes that break focus navigation. Flag any occurrence immediately. Patterns 1-17 are the original tvOS patterns. Patterns 18-24 are macOS-specific. Patterns 25-29 are production tvOS patterns discovered during Fox News/Fox Weather development.
+These are critical mistakes that break focus navigation. Flag any occurrence immediately. Patterns 1-17 are the original tvOS patterns. Patterns 18-24 are macOS-specific. Patterns 25-30 are production tvOS patterns discovered during Fox News/Fox Weather development.
 
 ## Blocking (must fix before ship)
 
@@ -440,6 +440,45 @@ When focus passes THROUGH a sidebar during grid→nav bar transitions (e.g., use
 ```
 
 Alternatively, use a short debounce (`Task.sleep(for: .milliseconds(100))`) to filter out transient focus touches. But the guard approach is simpler and more reliable.
+
+### 30. Missing `preferredFocusEnvironments` on tvOS UIViewController with multiple focusable subviews
+
+When a tvOS `UIViewController` (or its `view`) contains multiple sibling focusable subviews — a `UIStackView` of buttons, a row of `UIButton`s, multiple `UITableView`/`UICollectionView`s, etc. — and there is no `preferredFocusEnvironments` override, the focus engine picks the first focusable view it finds geometrically. That is rarely the intended initial focus.
+
+This is an **absence-check finding**: the absence of an override on a screen that needs one is itself the issue. Flag it on PRs that add or modify a tvOS view controller with multiple focusable subviews, even when no focus API symbol appears in the diff.
+
+```swift
+// BAD — three buttons in a vertical stack, no override.
+// First-launch focus lands on whichever button the engine finds first
+// geometrically, not necessarily the primary CTA.
+final class FreePreviewExpiredViewController: UIViewController {
+    private let buttonStack = UIStackView()
+    private lazy var foxOneSignUpButton = makeFoxOneSignUpButton()
+    private let signInButton = UIButton(type: .system)
+    private let homeButton = UIButton(type: .system)
+    // no preferredFocusEnvironments override
+}
+
+// GOOD — explicit primary CTA, conditional on visibility
+final class FreePreviewExpiredViewController: UIViewController {
+    override var preferredFocusEnvironments: [UIFocusEnvironment] {
+        if showFoxOneSignUp {
+            return [foxOneSignUpButton]
+        }
+        return [signInButton]
+    }
+}
+```
+
+How to spot in a diff:
+
+- A new `UIViewController` (or a modified one) with a `UIStackView` / `UIView` arranging more than one of: `UIButton`, `UITableView`, `UICollectionView`, focusable custom view.
+- The conditional shape of the screen changes (e.g. a new button appears under a flag) and there is no override or `setNeedsFocusUpdate` to redirect.
+- A reference repo (`foxnews-flagship-tvos`, fnfb-iOS) has the analogous screen with an explicit `preferredFocusEnvironments` override and the new code does not.
+
+When the conditional changes after launch (a flag flips, content arrives async), pair the override with `setNeedsFocusUpdate()` + `updateFocusIfNeeded()` from the VC that contains the focused view. Do not call from a sibling/parent that does not currently contain focus — see anti-pattern #7.
+
+Reference: `references/uikit-focus.md` "When to override `preferredFocusEnvironments`".
 
 ## macOS-Specific Anti-Patterns
 

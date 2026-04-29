@@ -4,7 +4,7 @@ description: Reviews, writes, and fixes focus management code for all Apple plat
 license: MIT
 metadata:
   author: Michael Haviv
-  version: "1.5"
+  version: "1.6"
   repository: https://github.com/mhaviv/Swift-FocusEngine-Agent-Skill
   homepage: https://github.com/mhaviv/Swift-FocusEngine-Agent-Skill
   keywords:
