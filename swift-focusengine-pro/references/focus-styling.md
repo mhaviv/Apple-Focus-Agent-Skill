@@ -71,7 +71,7 @@ struct IconButtonStyle: ButtonStyle {
 
 ## FocusBorder ViewModifier
 
-Reusable gradient border that appears on focus. From Fox Weather tvOS:
+Reusable gradient border that appears on focus:
 
 ```swift
 struct FocusBorder: ViewModifier {

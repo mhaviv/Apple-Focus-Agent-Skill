@@ -70,7 +70,7 @@ The table view naturally isolates rows — vertical focus moves between table ce
 
 ## Sidebar + Content Pattern
 
-### SwiftUI (Fox Weather pattern — basic)
+### SwiftUI (basic sidebar pattern)
 
 ```swift
 struct SidebarContentView: View {
@@ -112,7 +112,7 @@ Key patterns:
 
 ### SwiftUI (Production pattern — dual @FocusState with .disabled() gating)
 
-The basic sidebar pattern above has a critical flaw: when focus leaves (to grid, nav bar) and returns, `@FocusState` doesn't guarantee landing on the correct item. This production pattern from Fox News tvOS solves it by combining three techniques:
+The basic sidebar pattern above has a critical flaw: when focus leaves (to grid, nav bar) and returns, `@FocusState` doesn't guarantee landing on the correct item. This production pattern solves it by combining three techniques:
 
 ```swift
 struct TopicsSidebarView: View {
@@ -153,9 +153,9 @@ struct TopicsSidebarView: View {
 3. **`ScrollPosition`** — Declarative scroll binding avoids `ScrollViewReader.scrollTo()` feedback loops (see anti-pattern #26).
 4. **`onChange` guard** — Filters out transient focus touches during pass-through transitions (see anti-pattern #29).
 
-### UIKit Sidebar (Flagship Fox News pattern)
+### UIKit Sidebar (production pattern)
 
-The UIKit flagship uses a fundamentally different approach that avoids SwiftUI's focus chain issues:
+A reference UIKit codebase uses a fundamentally different approach that avoids SwiftUI's focus chain issues:
 
 ```swift
 class TopicsSidebarViewController: UITableViewController {
@@ -216,7 +216,7 @@ TabView(selection: $selectedTab) {
 }
 ```
 
-For custom tab bar (Fox Weather SideTabBar pattern):
+For custom tab bar (collapsible side tab bar pattern):
 - Wrap tab buttons in `.focusSection()`
 - Use `@FocusState` to track which tab is focused
 - Expand/collapse on focus enter/leave
@@ -299,7 +299,7 @@ override func shouldUpdateFocus(in context: UIFocusUpdateContext) -> Bool {
 
 ## Scroll + Arrow Button Pattern
 
-Horizontal shelf with left/right arrow buttons (Fox Weather PersonalitiesShelfView):
+Horizontal shelf with left/right arrow buttons:
 
 ```swift
 @FocusState private var buttonFocus: ScrollDirection?
@@ -534,7 +534,7 @@ Use `.mask()` with static gradient stops matching UIKit's `CAGradientLayer`:
 
 ```swift
 struct StaticEdgeFadeMask: View {
-    let fadeHeight: CGFloat = 40  // Match flagship's CAGradientLayer stop distance
+    let fadeHeight: CGFloat = 40  // Match the UIKit reference's CAGradientLayer stop distance
     
     var body: some View {
         VStack(spacing: 0) {
