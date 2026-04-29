@@ -2,6 +2,14 @@
 
 All notable changes to Swift FocusEngine Pro are documented here.
 
+## [1.6.0] - 2026-04-29
+
+### Added
+- **New tvOS anti-pattern #30** — Missing `preferredFocusEnvironments` override on UIKit view controllers with multiple focusable subviews. Without an explicit override, tvOS picks the geometrically first focusable view, which often lands on a secondary CTA (e.g., "Back to Home") instead of the primary action (e.g., "Sign In").
+- **Absence-check trigger** — pr-review-style guidance now flags vertical `UIStackView` of buttons, focusable list + standalone buttons, conditional CTA, and modal/sheet presentations that lack a `preferredFocusEnvironments` override. Absence of the override is itself a finding.
+- **`uikit-focus.md`: "When to override `preferredFocusEnvironments`" section** — enumerates the trigger conditions and provides a conditional-CTA pattern with `setNeedsFocusUpdate()` cross-reference (anti-pattern #7) for state changes after the view appears.
+- Total anti-patterns: 30 (up from 29)
+
 ## [1.5.0] - 2026-04-13
 
 ### Added

@@ -17,6 +17,30 @@ override var preferredFocusEnvironments: [UIFocusEnvironment] {
 }
 ```
 
+### When to override `preferredFocusEnvironments`
+
+Override on any tvOS `UIViewController` whose `view` contains more than one focusable subview at the same level. Without the override, the focus engine picks the geometrically-first focusable view, which is almost never the intended primary CTA.
+
+Triggers that require an override:
+
+- Vertical or horizontal `UIStackView` of multiple `UIButton`s.
+- A view containing both a focusable list (`UITableView`, `UICollectionView`) and standalone buttons.
+- A screen whose primary CTA is conditional on a flag, remote config, or async data — return the conditionally-correct environment from the override.
+- A modal/sheet presented over another VC where the system would otherwise restore focus to the presenter.
+
+For a conditional CTA, branch inside the override and pair with `setNeedsFocusUpdate()` + `updateFocusIfNeeded()` when the condition changes after the VC is on screen. Call those from the VC that currently contains focus — see "Programmatic focus updates" below and anti-pattern #7.
+
+```swift
+override var preferredFocusEnvironments: [UIFocusEnvironment] {
+    if showPrimaryCTA {
+        return [primaryCTAButton]
+    }
+    return [secondaryButton]
+}
+```
+
+The system reads `preferredFocusEnvironments` walking the chain: window -> root VC -> child VC -> view -> subview. Each step returns its preferred environments until reaching a focusable leaf. Returning a focusable `UIButton` directly (not wrapped) is correct — `UIButton` already conforms to `UIFocusEnvironment`.
+
 ### shouldUpdateFocus(in:)
 
 Validate or cancel focus moves. Called on EVERY focus environment in the hierarchy containing both the previously focused and next focused views. If ANY returns false, the move is canceled.
