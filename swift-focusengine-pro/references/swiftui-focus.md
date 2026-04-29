@@ -34,7 +34,7 @@ focusedField = .password
 focusedField = nil
 ```
 
-### Syncing with ViewModel (Fox Weather pattern)
+### Syncing with ViewModel
 ```swift
 // View extension for bidirectional sync
 extension View {
@@ -186,7 +186,7 @@ Used in custom ButtonStyles for visual feedback. See `references/focus-styling.m
 .focusEffectDisabled()     // Disables default focus appearance
 ```
 
-## AutoFocus Pattern (from Fox Weather)
+## AutoFocus Pattern
 
 One-time programmatic focus on screen load, coordinated with layout completion:
 

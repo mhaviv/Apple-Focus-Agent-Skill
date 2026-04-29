@@ -1,6 +1,6 @@
 # Focus Anti-Patterns (All Platforms)
 
-These are critical mistakes that break focus navigation. Flag any occurrence immediately. Patterns 1-17 are the original tvOS patterns. Patterns 18-24 are macOS-specific. Patterns 25-30 are production tvOS patterns discovered during Fox News/Fox Weather development.
+These are critical mistakes that break focus navigation. Flag any occurrence immediately. Patterns 1-17 are the original tvOS patterns. Patterns 18-24 are macOS-specific. Patterns 25-30 are production tvOS patterns discovered during large-scale media-app development.
 
 ## Blocking (must fix before ship)
 
@@ -14,7 +14,7 @@ Button("Watch") { ... }
     .disabled(isLoading)
 ```
 
-**There is no perfect SwiftUI replacement.** The commonly recommended `.allowsHitTesting(false)` is **unreliable on tvOS** — production testing revealed it may map to `isUserInteractionEnabled = false` under the hood, which anti-pattern #8 warns against. The Fox Weather CTV codebase documented this: `.disabled()` makes buttons non-focusable even when re-enabled, breaking diagonal navigation. But `.allowsHitTesting(false)` was inconclusive about keeping views focusable.
+**There is no perfect SwiftUI replacement.** The commonly recommended `.allowsHitTesting(false)` is **unreliable on tvOS** — production testing revealed it may map to `isUserInteractionEnabled = false` under the hood, which anti-pattern #8 warns against. Production codebases have documented this: `.disabled()` makes buttons non-focusable even when re-enabled, breaking diagonal navigation. But `.allowsHitTesting(false)` was inconclusive about keeping views focusable.
 
 **Recommended approaches, depending on context:**
 
@@ -39,7 +39,7 @@ Button("Watch") {
 // with all items enabled once focus is inside the container.
 ```
 
-UIKit equivalent: `UIButton.isEnabled = false` also makes the button unfocusable. The UIKit flagship pattern never disables individual items — it gates the container's `isUserInteractionEnabled` instead (see layout-patterns.md, UIKit Sidebar section).
+UIKit equivalent: `UIButton.isEnabled = false` also makes the button unfocusable. The reference UIKit pattern never disables individual items — it gates the container's `isUserInteractionEnabled` instead (see layout-patterns.md, UIKit Sidebar section).
 
 **For sidebar/list items with active selection state**, see anti-pattern #25 below — `.disabled()` on multiple items simultaneously is an even worse variant of this problem.
 
@@ -331,7 +331,7 @@ ScrollView {
 .focused($isContainerFocused)
 ```
 
-This "dual `@FocusState`" pattern (container + per-item) was discovered in production Fox News tvOS development. The key insight: `.disabled()` gating works when it only constrains ENTRY from outside, not when it toggles during active navigation within the list.
+This "dual `@FocusState`" pattern (container + per-item) was discovered in production tvOS development. The key insight: `.disabled()` gating works when it only constrains ENTRY from outside, not when it toggles during active navigation within the list.
 
 ### 26. `ScrollViewReader.scrollTo()` inside `onChange` creates feedback loops with focus engine
 
@@ -451,19 +451,19 @@ This is an **absence-check finding**: the absence of an override on a screen tha
 // BAD — three buttons in a vertical stack, no override.
 // First-launch focus lands on whichever button the engine finds first
 // geometrically, not necessarily the primary CTA.
-final class FreePreviewExpiredViewController: UIViewController {
+final class PaywallViewController: UIViewController {
     private let buttonStack = UIStackView()
-    private lazy var foxOneSignUpButton = makeFoxOneSignUpButton()
+    private lazy var subscribeButton = makeSubscribeButton()
     private let signInButton = UIButton(type: .system)
-    private let homeButton = UIButton(type: .system)
+    private let dismissButton = UIButton(type: .system)
     // no preferredFocusEnvironments override
 }
 
 // GOOD — explicit primary CTA, conditional on visibility
-final class FreePreviewExpiredViewController: UIViewController {
+final class PaywallViewController: UIViewController {
     override var preferredFocusEnvironments: [UIFocusEnvironment] {
-        if showFoxOneSignUp {
-            return [foxOneSignUpButton]
+        if showSubscribeOption {
+            return [subscribeButton]
         }
         return [signInButton]
     }
@@ -474,7 +474,7 @@ How to spot in a diff:
 
 - A new `UIViewController` (or a modified one) with a `UIStackView` / `UIView` arranging more than one of: `UIButton`, `UITableView`, `UICollectionView`, focusable custom view.
 - The conditional shape of the screen changes (e.g. a new button appears under a flag) and there is no override or `setNeedsFocusUpdate` to redirect.
-- A reference repo (`foxnews-flagship-tvos`, fnfb-iOS) has the analogous screen with an explicit `preferredFocusEnvironments` override and the new code does not.
+- A canonical reference codebase has the analogous screen with an explicit `preferredFocusEnvironments` override and the new code does not.
 
 When the conditional changes after launch (a flag flips, content arrives async), pair the override with `setNeedsFocusUpdate()` + `updateFocusIfNeeded()` from the VC that contains the focused view. Do not call from a sibling/parent that does not currently contain focus — see anti-pattern #7.
 
