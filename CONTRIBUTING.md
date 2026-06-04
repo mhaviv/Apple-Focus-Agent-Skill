@@ -19,7 +19,7 @@ Contributions are welcome! This skill helps AI coding assistants write correct f
 
 ## Structure
 
-Reference files live in `swift-focusengine-pro/references/`. Each file covers a specific topic:
+Reference files live in `references/`. Each file covers a specific topic:
 
 | File | Focus |
 |------|-------|

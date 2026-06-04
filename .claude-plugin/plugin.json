@@ -1,6 +1,6 @@
 {
   "name": "swift-focusengine-pro",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Expert focus management guidance for tvOS, iOS/iPadOS, watchOS, visionOS, and macOS. Covers SwiftUI, UIKit, AppKit, and RealityKit focus APIs, 29 critical anti-patterns, and debugging techniques.",
   "author": {
     "name": "Michael Haviv",
@@ -14,6 +14,6 @@
     "realitykit", "hover-effect", "accessibility", "key-view-loop", "mac-catalyst"
   ],
   "skills": [
-    "./swift-focusengine-pro"
+    "."
   ]
 }

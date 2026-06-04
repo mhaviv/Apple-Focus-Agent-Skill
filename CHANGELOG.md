@@ -2,6 +2,12 @@
 
 All notable changes to Swift FocusEngine Pro are documented here.
 
+## [1.7.1] - 2026-06-04
+
+### Fixed
+- **Repo structure — `npx skills add` now resolves correctly.** The repo previously had both a root `SKILL.md` and a duplicate `swift-focusengine-pro/SKILL.md` subfolder (same skill name). Installers stopped at the root `SKILL.md` and copied the whole repo, leaving `references/` one level too deep and breaking the skill's own reference paths. The skill is now a single flat skill at the repo root (`SKILL.md` + `references/` + `agents/`); the duplicate subfolder is removed and `package.json` points at `.`. No skill-content changes from 1.7.0 — this is purely a packaging fix.
+- Root `SKILL.md` description upgraded to the fuller write/review trigger text for better auto-activation.
+
 ## [1.7.0] - 2026-06-04
 
 ### Improved diagnosis (no new anti-patterns)
