@@ -88,6 +88,16 @@ HStack {
 ### Gotcha
 `focusSection()` needs the container to have sufficient frame size. If buttons don't fill the space, add `Spacer()` inside the container to expand its bounds.
 
+**No last-focused memory.** Unlike UIKit's `remembersLastFocusedIndexPath`, `focusSection()` does NOT remember which item you left from. On every entry the focus engine picks **geometrically** — the item nearest to where focus came from — not the item you last focused inside the section. So if re-entering a section lands on the wrong item (e.g. arrowing Up from a grid back into a row of section/category pills lands on the nearest pill instead of the selected one), that geometric pick is the cause. The fix is to gate entry so only the intended item is focusable from outside — see **anti-pattern #25** (dual-`@FocusState` + `.disabled()` gating): a container `@FocusState` bool plus `.disabled(!isContainerFocused && item != selected)` leaves exactly one valid entry target, so re-entry lands there with no geometric hop. A reactive `onChange` redirect does NOT work here — the engine moves geometrically first, so you see a visible hop before it corrects.
+
+**A section narrower than the content below it lets focus escape past it.** Distinct from the "too small" case above: here the section has focusable items, they're just not geometrically overhead. If a `focusSection()` is narrower than (or horizontally offset from) the content beneath it, the columns with no section directly above them find nothing when pressing Up — focus escapes past the section entirely (e.g. straight to the tab bar). Expand the section to span the content width before applying `.focusSection()`:
+
+```swift
+HStack { /* left-aligned pills */ }
+    .frame(maxWidth: .infinity, alignment: .leading)  // span the full grid width
+    .focusSection()                                    // so every column below has a section overhead
+```
+
 ## prefersDefaultFocus(_:in:) + focusScope(_:)
 
 Controls which view gets focus by default within a namespace scope. tvOS and watchOS only.

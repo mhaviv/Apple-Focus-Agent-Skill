@@ -47,6 +47,23 @@ When returning from a detail view, use the AutoFocusManager pattern to restore f
 }
 ```
 
+### Modal/overlay shown with a ZStack `if/else` does NOT auto-restore
+
+`.sheet()` and `.fullScreenCover()` restore focus to the presenting view automatically on dismiss. A hand-rolled overlay — swapping views with `if showingOverlay { overlay } else { screen }` inside a `ZStack` — does **not**. When you flip the flag back, SwiftUI rebuilds the underlying screen from scratch and focus falls to the geometrically-first focusable view (usually the leftmost button), not where the user was.
+
+Restoring it has a timing trap: setting `@FocusState` **synchronously** in the same state update that dismisses the overlay is dropped, because the target button doesn't exist in the hierarchy yet — it's only created as the screen rebuilds. Defer the assignment to the next runloop tick so the rebuilt view (and its target) exist first:
+
+```swift
+Button("Close") {
+    showingOverlay = false          // triggers the screen to rebuild
+    // Synchronous `focusedAction = .readFullStory` here is DROPPED —
+    // the target button isn't in the hierarchy yet. Defer one tick.
+    Task { @MainActor in
+        focusedAction = .readFullStory
+    }
+}
+```
+
 ## UIKit Pattern
 
 ### Manual tracking + preferredFocusEnvironments

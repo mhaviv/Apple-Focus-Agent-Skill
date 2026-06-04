@@ -2,6 +2,16 @@
 
 All notable changes to Swift FocusEngine Pro are documented here.
 
+## [1.7.0] - 2026-06-04
+
+### Improved diagnosis (no new anti-patterns)
+
+These edits make existing fixes findable from the symptom — the fix for section re-entry was already documented in anti-pattern #25, but nothing routed you to it from the observed behavior.
+
+- **`swiftui-focus.md` — `focusSection()` "No last-focused memory" gotcha.** Explicit statement that, unlike UIKit's `remembersLastFocusedIndexPath`, `focusSection()` picks geometrically on every entry and remembers nothing. Names the common symptom (arrowing Up from a grid into a row of pills lands on the nearest pill, not the selected one) and routes to anti-pattern #25 for the fix. Notes that a reactive `onChange` redirect causes a visible hop and is not the fix.
+- **`swiftui-focus.md` — section-width escape gotcha.** A `focusSection()` narrower than (or offset from) the content below it leaves columns with no section overhead, so Up escapes past it (e.g. to the tab bar). Fix: `.frame(maxWidth: .infinity, alignment: .leading)` before `.focusSection()`.
+- **`focus-restoration.md` — ZStack `if/else` overlay restoration.** A hand-rolled overlay swap does not auto-restore focus like `.sheet()`/`.fullScreenCover()`. Documents the timing trap: a synchronous `@FocusState` assignment on dismiss is dropped because the target isn't rebuilt yet — defer with `Task { @MainActor in … }`.
+
 ## [1.6.0] - 2026-04-29
 
 ### Added
