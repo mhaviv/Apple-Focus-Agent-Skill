@@ -76,6 +76,26 @@ entity.accessibilityLabel = "3D Trophy Model"
 entity.isAccessibilityElement = true
 ```
 
+## accessibilityDefaultFocus (OS 26+)
+
+> Evidence: SDK-verified — `@available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, visionOS 26.0, *)` in the 26.5 SDK SwiftUI interface on all five platforms.
+
+The accessibility analog of `defaultFocus`: declares which element VoiceOver focus should land on by default when a view appears, driven by an `AccessibilityFocusState` binding:
+
+```swift
+@AccessibilityFocusState private var a11yFocus: Field?
+
+VStack {
+    TextField("Email", text: $email)
+        .accessibilityFocused($a11yFocus, equals: .email)
+    SecureField("Password", text: $password)
+        .accessibilityFocused($a11yFocus, equals: .password)
+}
+.accessibilityDefaultFocus($a11yFocus, .email)
+```
+
+This controls **VoiceOver focus only** — it does not touch UI focus (`@FocusState`/`defaultFocus`). When both matter (tvOS especially), set both defaults and keep the two systems' targets consistent so VoiceOver users and remote users land on the same element.
+
 ## Full Keyboard Access (iOS/iPadOS)
 
 Full Keyboard Access (Settings > Accessibility > Keyboards) requires a connected hardware keyboard — what it changes is *reach*: with FKA on, Tab/arrow navigation reaches ALL controls, not just text fields and lists (the default keyboard-focus scope). It activates the full focus system.
