@@ -79,7 +79,7 @@ If doing a partial review, load only the relevant reference files.
 ### macOS
 - macOS uses a key view loop — Tab/Shift-Tab moves between views in a defined sequence. This is NOT spatial like tvOS.
 - Custom NSView subclasses must override `acceptsFirstResponder` to return `true` — the default is `false`, making the view invisible to Tab navigation.
-- `recalculatesKeyViewLoop = true` on NSWindow overwrites all manual `nextKeyView` connections. Pick one approach.
+- `autorecalculatesKeyViewLoop = true` on NSWindow overwrites all manual `nextKeyView` connections. Pick one approach.
 - Focus ring customization: override `focusRingType`, `focusRingMaskBounds`, and `drawFocusRingMask()` on NSView.
 - `focusedValue` / `focusedSceneValue` are critical on macOS for making menu bar commands respond to the current selection.
 - Mac Catalyst: inherits iPad `UIFocusSystem`. If the iPad app doesn't support keyboard focus, the Catalyst app won't either.
@@ -92,7 +92,7 @@ If doing a partial review, load only the relevant reference files.
 
 ### Toolchain status (as of Xcode 27 beta, Aug 2026)
 - OS 26 and the OS 27 betas added **no new focus APIs and no focus deprecations**. What changed around focus: Liquid Glass alters focused-control appearance on tvOS 26 (4K 2nd gen+ only — older devices keep pre-glass visuals), `ControlSize` works on tvOS 26+, `.sidebarAdaptable` TabView (tvOS 18+) moves the tab region to a leading sidebar, and visionOS 26 adds opt-in gaze scrolling (`.scrollInputBehavior(.enabled, for: .look)`).
-- The 27 SDKs **require the scene-based lifecycle** (apps fail to launch without it) and tvOS 27 adds Dynamic Type — both affect focus sample scaffolding and sizing, not focus APIs.
+- The 27 SDKs **require the scene-based lifecycle** on iOS/iPadOS/tvOS/visionOS/Mac Catalyst (apps fail to launch without it; macOS and watchOS are unaffected), and tvOS 27 adds Dynamic Type — both affect focus sample scaffolding and sizing, not focus APIs.
 - Swift 6.2: new Xcode 26 projects default to module-wide MainActor isolation; keep explicit `@MainActor` in examples that must compile in both worlds (see `references/async-focus.md`).
 
 

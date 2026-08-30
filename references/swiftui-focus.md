@@ -203,7 +203,7 @@ One-time programmatic focus on screen load, coordinated with layout completion:
 ```swift
 @MainActor @Observable
 final class AutoFocusManager {
-    // Non-UI bookkeeping — @ObservationIgnored avoids body re-evaluation (see anti-pattern #27)
+    // Non-UI bookkeeping — kept out of observation entirely
     @ObservationIgnored private var hasTriggered = false
     var focusRequest: Int = 0  // incremented once per screen appearance
 

@@ -210,12 +210,14 @@ override func didUpdateFocus(in context: UIFocusUpdateContext, ...) {
 
 ### SwiftUI
 
-tvOS 18+ uses the `Tab` builder (`.tabItem` is soft-deprecated since iOS/tvOS 18):
+tvOS 18+ uses the `Tab` builder (`.tabItem` is soft-deprecated since iOS/tvOS 18). Name your selection enum something other than `Tab` — a type named `Tab` shadows `SwiftUI.Tab` and the builder stops resolving:
 
 ```swift
+enum AppTab { case home, shows }
+
 TabView(selection: $selectedTab) {
-    Tab("Home", systemImage: "house", value: Tab.home) { HomeView() }
-    Tab("Shows", systemImage: "tv", value: Tab.shows) { ShowsView() }
+    Tab("Home", systemImage: "house", value: AppTab.home) { HomeView() }
+    Tab("Shows", systemImage: "tv", value: AppTab.shows) { ShowsView() }
 }
 ```
 

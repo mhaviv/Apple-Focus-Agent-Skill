@@ -115,7 +115,9 @@ entityB.components.set(hoverB)
 
 `HoverEffectComponent` is available on iOS 18+, iPadOS 18+, Mac Catalyst 18+, and macOS 15+ as well — there, "hover" means the mouse/trackpad pointer instead of gaze. The `InputTargetComponent` + `CollisionComponent` requirement is the same everywhere.
 
-### visionOS 26 input components (doc-sourced)
+### visionOS 26 input components
+
+> Evidence: Apple documentation / release notes (Aug 2026) — doc-sourced, not yet production-verified.
 
 visionOS 26 added two entity-level input components worth knowing when reviewing interaction code: `ManipulationComponent` (system-driven 6DOF hand-gesture move/rotate/scale) and `GestureComponent` (attach gestures directly to an entity instead of a SwiftUI gesture on the RealityView). Neither replaces the hover triad above — an entity still needs `InputTargetComponent` + `CollisionComponent` to be targetable.
 

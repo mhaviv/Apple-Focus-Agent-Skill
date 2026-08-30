@@ -339,7 +339,7 @@ buttonB.nextKeyView = buttonC
 buttonC.nextKeyView = textField
 ```
 
-Alternative: Set `window.recalculatesKeyViewLoop = true` and let the system manage the loop geometrically. But never mix manual `nextKeyView` with `recalculatesKeyViewLoop`.
+Alternative: Set `window.autorecalculatesKeyViewLoop = true` and let the system manage the loop geometrically. But never mix manual `nextKeyView` with `autorecalculatesKeyViewLoop`.
 
 ### 20. Calling `becomeFirstResponder()` directly
 

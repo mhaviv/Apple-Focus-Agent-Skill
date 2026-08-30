@@ -52,7 +52,7 @@ The genuinely dangerous case is `Task.detached` (or a plain `Task {}` created fr
 ### Swift 6.2 isolation notes
 
 - New Xcode 26 app projects default to **MainActor isolation for the whole module** (SE-0466 "approachable concurrency"), which makes explicit `@MainActor` annotations on focus coordinators redundant there. Existing projects keep nonisolated-by-default unless they opt in — keep the annotations in code that must compile in both worlds.
-- Under the 6.2 defaults, a `nonisolated async` helper runs on the *caller's* actor (SE-0461), so awaiting it from `@MainActor` focus code no longer hops threads. To deliberately push expensive work off the main actor before setting focus state, mark the function `@concurrent`.
+- With Approachable Concurrency enabled (the default for new Xcode 26 projects; existing projects opt in via `SWIFT_APPROACHABLE_CONCURRENCY`), a `nonisolated async` helper runs on the *caller's* actor — SE-0461, `nonisolated(nonsending)` — so awaiting it from `@MainActor` focus code no longer hops threads. To deliberately push expensive work off the main actor before setting focus state, mark the function `@concurrent`.
 
 ## Focus After Data Load
 
@@ -113,15 +113,15 @@ class CatalogViewController: UIViewController {
         
         let newData = await fetchData()
         
-        await MainActor.run {
-            dataSource.apply(newData, animatingDifferences: false)
-            collectionView.layoutIfNeeded()
-            
-            // Unlock and restore
-            allowsFocusUpdate = true
-            setNeedsFocusUpdate()
-            updateFocusIfNeeded()
-        }
+        // Back on the main actor after the await — this async method belongs to a
+        // @MainActor view controller, so no MainActor.run wrapper is needed.
+        dataSource.apply(newData, animatingDifferences: false)
+        collectionView.layoutIfNeeded()
+        
+        // Unlock and restore
+        allowsFocusUpdate = true
+        setNeedsFocusUpdate()
+        updateFocusIfNeeded()
     }
     
     func indexPathForPreferredFocusedView(in collectionView: UICollectionView) -> IndexPath? {

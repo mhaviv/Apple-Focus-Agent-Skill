@@ -63,11 +63,11 @@ popUpButton.nextKeyView = textField  // Complete the loop
 
 **Auto-recalculation:**
 ```swift
-window.recalculatesKeyViewLoop = true  // System manages the loop
+window.autorecalculatesKeyViewLoop = true  // System manages the loop
 // System uses geometric position (left-to-right, top-to-bottom) to determine order
 ```
 
-Common mistake: Setting `recalculatesKeyViewLoop = true` AND manually setting `nextKeyView`. The manual chain gets overwritten.
+Common mistake: Setting `autorecalculatesKeyViewLoop = true` AND manually setting `nextKeyView`. The manual chain gets overwritten.
 
 ## SwiftUI Focus on macOS
 
@@ -603,8 +603,8 @@ Custom NSView subclasses return `false` by default. Without overriding to `true`
 ### 3. Focus ring on custom-drawn views
 If you draw content with custom insets or shapes, the default rectangular focus ring looks wrong. Override `drawFocusRingMask()` and `focusRingMaskBounds`.
 
-### 4. Conflicting recalculatesKeyViewLoop with manual nextKeyView
-Setting `recalculatesKeyViewLoop = true` overrides all manual `nextKeyView` connections. Pick one approach.
+### 4. Conflicting autorecalculatesKeyViewLoop with manual nextKeyView
+Setting `autorecalculatesKeyViewLoop = true` overrides all manual `nextKeyView` connections. Pick one approach.
 
 ### 5. Assuming Full Keyboard Access is always on
 Most users don't enable it. Your custom views that rely on Tab focus for non-text-field controls may not receive focus for most users. Always provide mouse/trackpad interaction as primary.
@@ -637,17 +637,19 @@ Using `.focusable()` on a view that already has system focus support (like TextF
 | `acceptsFirstResponder` | Whether NSView can receive focus at all |
 | `canBecomeKeyView` | Whether NSView participates in Tab loop |
 | `nextKeyView` / `previousKeyView` | Manual key view loop construction |
-| `recalculatesKeyViewLoop` | Auto-calculate Tab order from geometry |
+| `autorecalculatesKeyViewLoop` | Auto-calculate Tab order from geometry |
 | `NSWindow.initialFirstResponder` | View that gets focus when window opens |
 | `NSFocusRingType` | Control focus ring appearance per view |
 | `drawFocusRingMask()` | Custom focus ring shape |
 | `NSWindow.makeFirstResponder(_:)` | Programmatic focus — macOS equivalent of UIKit's `setNeedsFocusUpdate` |
 | `becomesKeyOnlyIfNeeded` (NSPanel) | Panels that don't steal focus unless needed |
 
-## macOS 26 / macOS 27 notes (doc-sourced; 27 items are beta as of Aug 2026)
+## macOS 26 / macOS 27 notes
+
+> Evidence: Apple documentation, release notes, and WWDC26 sessions (Aug 2026) — doc-sourced; macOS 27 items are beta and may change before GA.
 
 - **macOS 26 (Tahoe):** no new focus/key-loop APIs. Liquid Glass (`NSGlassEffectView`, `.glass` bezel styles) changes how focused system controls *look* — custom focus-ring drawing tuned to pre-26 chrome should be re-checked visually.
-- **macOS 27 (beta):** keyboard navigation now reaches the **menu bar and status items**; NSStatusItem gains an expanded-interface-session API (delegate callbacks for when custom status-item UI holds keyboard focus). `NSWindow.autorecalculatesKeyViewLoop` is the recommended way to keep the key loop current as views change (same manual-vs-automatic tradeoff as `recalculatesKeyViewLoop` — don't mix with manual `nextKeyView` chains). New `NSTextSelectionManager` brings system text-selection behavior to custom views. Nothing here changes the responder-chain fundamentals in this file.
+- **macOS 27 (beta):** keyboard navigation now reaches the **menu bar and status items**; NSStatusItem gains an expanded-interface-session API (delegate callbacks for when custom status-item UI holds keyboard focus). New `NSTextSelectionManager` brings system text-selection behavior to custom views. WWDC26's AppKit session also recommends the long-standing `NSWindow.autorecalculatesKeyViewLoop` (not a new API — see Key View Loop Setup above) over manual `nextKeyView` chains. Nothing here changes the responder-chain fundamentals in this file.
 
 ## WWDC Sessions
 

@@ -112,7 +112,9 @@ extension View {
 
 Prefer `.card` for media content — it provides parallax, shadow, and the standard tvOS "lift" feel that custom scale effects don't replicate.
 
-## tvOS 26 / Liquid Glass (doc-sourced)
+## tvOS 26 / Liquid Glass
+
+> Evidence: Apple documentation / release notes (Aug 2026) — doc-sourced, not yet production-verified.
 
 OS 26 introduced no new focus APIs, but Liquid Glass changes what *focused* looks like:
 
@@ -120,7 +122,7 @@ OS 26 introduced no new focus APIs, but Liquid Glass changes what *focused* look
 - **Device matrix caveat:** Apple's tvOS 26 release notes state the design updates are NOT carried forward to Apple TV 4K (1st gen) and older — the same app shows pre-glass focus visuals there. Test both looks.
 - `ControlSize` works on tvOS starting with tvOS 26 (`.controlSize(_:)`, environment value) — focused-control sizing can now vary by control size, which affects scale-matching math.
 - Re-verify any hard-coded focus scale constants (e.g., the 1.13x table in layout-patterns.md, measured on tvOS ≤18) against tvOS 26 system behavior before relying on them for pixel matching.
-- Apps built with the 26 SDKs also change SwiftUI-vs-UIKit **gesture priority**: SwiftUI gestures no longer automatically yield to existing `UIGestureRecognizer`s — use `highPriorityGesture`/`simultaneousGesture` explicitly where remote gestures and focus interactions coexist.
+- Apps built with the 26 SDKs also change SwiftUI-vs-UIKit **gesture priority**: SwiftUI gestures now yield to a view's existing `UIGestureRecognizer`s/`NSGestureRecognizer`s by default (previously they didn't). Use `highPriorityGesture(_:isEnabled:)` when your SwiftUI gesture must take precedence, or `simultaneousGesture(_:isEnabled:)` to run both — relevant wherever remote gestures and focus interactions coexist.
 
 ## UIKit Focus Animations
 
