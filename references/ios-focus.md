@@ -321,7 +321,7 @@ class DocumentModel: ObservableObject {
 
 When a game controller (MFi, Xbox, PlayStation, etc.) is connected via Bluetooth, its directional pad drives the same `UIFocusSystem` as keyboard arrow keys.
 
-> Evidence: heuristic — controller-driven `UIFocusSystem` navigation is documented behavior on tvOS; this section extrapolates it to iOS/iPadOS and has not been device-verified there. Verify on hardware before relying on it in a review finding.
+> Evidence: Apple-documented — UIKit's "Focus-based navigation" collection (which spans iPad and tvOS focus) states apps are navigable "using a remote, game controller, or keyboard," and the HIG's Game Controllers page prescribes d-pad/left-stick focus movement. Specific button mappings below are HIG-derived; verify exact mappings on hardware before citing them in a review finding.
 
 ### How It Works
 
