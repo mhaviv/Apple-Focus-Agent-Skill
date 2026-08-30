@@ -134,9 +134,10 @@ struct TopicsSidebarView: View {
                         .disabled(!isContainerFocused && selectedIndex != index)
                 }
             }
+            .scrollTargetLayout()  // required for id-based ScrollPosition tracking
         }
         .focused($isContainerFocused)
-        .scrollPosition($scrollPosition)  // Declarative — no ScrollViewReader
+        .scrollPosition($scrollPosition)  // Declarative (tvOS 18+) — no ScrollViewReader
         .focusSection()
         .onChange(of: focusedIndex) { old, new in
             // Only act on within-sidebar navigation (both non-nil)
@@ -364,7 +365,7 @@ NavigationSplitView {
     List(items, selection: $selectedItem) { item in
         Text(item.title)
     }
-    .focusSection()  // macOS 14+ — Tab switches between sidebar and content
+    .focusSection()  // macOS 13+ — Tab switches between sidebar and content
 } detail: {
     if let item = selectedItem {
         DetailView(item: item)

@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/macOS-12+-000000?logo=apple" />
   <img src="https://img.shields.io/badge/Swift-5.9+-F05138?logo=swift&logoColor=white" />
   <img src="https://img.shields.io/badge/License-MIT-blue" />
-  <img src="https://img.shields.io/badge/version-1.7.1-brightgreen" />
+  <img src="https://img.shields.io/badge/version-1.7.2-brightgreen" />
 </p>
 
 <p align="center">
@@ -185,7 +185,7 @@ Use the swift-focusengine-pro skill to review my focus handling code
 
 ## What It Covers
 
-### 4,500+ lines of focus expertise across 14 reference files (v1.6)
+### 5,000+ lines of focus expertise across 14 reference files
 
 | Reference | Platform | Coverage |
 |-----------|----------|----------|
@@ -396,7 +396,7 @@ See [CHANGELOG.md](CHANGELOG.md) for release history.
 Contributions are welcome! Focus on:
 
 - **Edge cases** — non-obvious focus behaviors that catch developers off guard
-- **New platform APIs** — iOS 19, tvOS 19, visionOS 3, watchOS 12, macOS 16 additions
+- **New platform APIs** — additions from the latest OS releases (iOS/tvOS/macOS/visionOS/watchOS 26 and newer)
 - **Real-world patterns** — battle-tested solutions from production apps
 - **Anti-patterns** — mistakes LLMs commonly generate
 

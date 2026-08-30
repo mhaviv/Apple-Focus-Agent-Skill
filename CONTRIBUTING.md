@@ -5,13 +5,13 @@ Contributions are welcome! This skill helps AI coding assistants write correct f
 ## What to Contribute
 
 - **Edge cases** — non-obvious focus behaviors that catch developers off guard
-- **New platform APIs** — iOS 19, tvOS 19, visionOS 3, watchOS 12 additions
+- **New platform APIs** — additions from the latest OS releases (iOS/tvOS/macOS/visionOS/watchOS 26 and newer)
 - **Real-world patterns** — battle-tested solutions from production apps
 - **Anti-patterns** — mistakes LLMs commonly generate
 
 ## Guidelines
 
-- Keep reference files focused and under 300 lines each
+- Keep reference files focused on a single topic; prefer routing a new topic to a new file over growing an existing one past ~600 lines
 - Don't repeat things LLMs already know — focus on what they get wrong
 - Include code examples that compile and demonstrate the concept
 - Note minimum OS version requirements for every API mentioned
@@ -29,6 +29,7 @@ Reference files live in `references/`. Each file covers a specific topic:
 | `ios-focus.md` | iOS/iPadOS focus (keyboard, game controller, Stage Manager) |
 | `watchos-focus.md` | watchOS Digital Crown and sequential focus |
 | `visionos-focus.md` | visionOS gaze, hover, and focus |
+| `macos-focus.md` | macOS key view loop, NSView focus, focus ring, focusedValue, Catalyst |
 | `realitykit-focus.md` | RealityKit entity hover and gestures |
 | `focus-styling.md` | Focus visual styling patterns |
 | `focus-restoration.md` | Focus state preservation across data reloads |

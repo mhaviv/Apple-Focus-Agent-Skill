@@ -1,7 +1,7 @@
 ---
 name: swift-focusengine-pro
 description: Reviews, writes, and fixes focus management code for all Apple platforms (tvOS, iOS/iPadOS, watchOS, visionOS, macOS), covering SwiftUI, UIKit, AppKit, and RealityKit. Use when reading, writing, or reviewing apps that handle focus, hover, key view loops, or Digital Crown navigation.
-version: 1.7.1
+version: 1.7.2
 author: Michael Haviv
 tags:
   - swift
@@ -57,7 +57,7 @@ If doing a partial review, load only the relevant reference files.
 ### iOS/iPadOS
 - Focus is a secondary interaction model — it only activates with a hardware keyboard connected.
 - Tab moves between focus groups; arrow keys move within a group. This two-level model does NOT exist on tvOS.
-- Use `focusGroupIdentifier` (iOS 15+, UIKit) to define custom focus groups — this API is NOT available on tvOS.
+- Use `focusGroupIdentifier` (iOS 14+, UIKit) to define custom focus groups — this API is NOT available on tvOS.
 - Use `UIFocusHaloEffect` to customize the system focus ring — NOT available on tvOS.
 - Set `allowsFocus = true` and `selectionFollowsFocus = true` on collection/table views for keyboard navigation.
 - Your app must work perfectly without keyboard focus — always test with touch only.
@@ -96,7 +96,7 @@ If doing a partial review, load only the relevant reference files.
 Organize findings by file. For each issue:
 
 1. State the file and relevant line(s).
-2. Name the rule being violated (e.g., "Use `.allowsHitTesting(false)` instead of `.disabled()`").
+2. Name the rule being violated (e.g., "Do not remove ordinary controls from the tvOS focus chain — gate the action instead of using `.disabled()`; the deliberate dual-`@FocusState` entry-gating pattern in anti-pattern #25 is the one exception").
 3. Show a brief before/after code fix.
 
 Skip files with no issues. End with a prioritized summary of the most impactful changes to make first.
@@ -143,7 +143,7 @@ End of example.
 
 ## References
 
-- `references/anti-patterns.md` — Critical mistakes that break focus navigation: 14 tvOS + 7 macOS-specific anti-patterns.
+- `references/anti-patterns.md` — Critical mistakes that break focus navigation: 30 numbered anti-patterns across tvOS/general and macOS-specific sections.
 - `references/swiftui-focus.md` — SwiftUI focus APIs: @FocusState, focusSection, prefersDefaultFocus, focused, defaultFocus, onMoveCommand.
 - `references/uikit-focus.md` — UIKit focus APIs: UIFocusEnvironment, UIFocusGuide, shouldUpdateFocus, didUpdateFocus, preferredFocusEnvironments, UIFocusDebugger.
 - `references/focus-styling.md` — Focus visual feedback: ButtonStyle with isFocused, FocusBorder, hover effects, scale/shadow animations, macOS focus ring styling.

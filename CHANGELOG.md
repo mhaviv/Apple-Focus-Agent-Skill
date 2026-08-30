@@ -2,6 +2,23 @@
 
 All notable changes to Swift FocusEngine Pro are documented here.
 
+## [1.7.2] - 2026-08-30
+
+### Fixed — correctness pass, verified against live Apple documentation
+
+No anti-pattern substance changed. This release fixes API facts an agent would paste verbatim.
+
+- **Nonexistent APIs removed.** `UIFocusDebugger.checkFocusGroupTree(for:)` → the real `focusGroups(for:)`, plus added `preferredFocusEnvironments(for:)` (debugging.md). `noteFocusRingChanged()` → the real `noteFocusRingMaskChanged()`, documented as a method you *call*, not an override point (focus-styling.md, macos-focus.md). `drawRect(_:)` → `draw(_:)` (focus-styling.md). Removed the non-functional `clipsToBoundsDisabled()` helper (its preference key had no definition or reader) in favor of real UIKit/SwiftUI clipping guidance.
+- **`.focusSection()` is macOS 13+/tvOS 15+ only — removed the incorrect iOS 17+ claim** from ios-focus.md, macos-focus.md, and the accessibility Full Keyboard Access example, which is now built on `focusGroupIdentifier` (iOS 14+) as it must be on iOS.
+- **`ScrollPosition` availability corrected to tvOS 18+/iOS 18+** (was 17+) in anti-patterns #26, async-focus.md, and layout-patterns.md, and all `ScrollPosition` examples now include the required `.scrollTargetLayout()`. The `ScrollViewReader` fallback guidance now correctly applies to all pre-18 deployment targets.
+- **Availability annotations corrected:** `focusGroupIdentifier` iOS 14+ (was 15+), `UIFocusGuide` iOS 9+, `defaultFocus`/`.focusSection()` macOS 13+ (was 14+), `hoverEffect` iOS 13.4+/tvOS 16+ (table said tvOS 17+/N-A on iOS), `.defaultHoverEffect()` visionOS 1.0+ (was 2.0+), `UIFocusItemDeferralMode` iOS/tvOS 18+ (was 15+, semantics corrected to match docs), `prefersDefaultFocus` also available on macOS 12+.
+- **SKILL.md output-format example no longer names the revoked `.allowsHitTesting(false)` rule** — it now states the action-gating rule with the anti-pattern #25 exception, matching the v1.5.0 correction.
+- **visionOS fixes:** `HoverEffectGroup` example rewritten to real signatures (`hoverEffect(_:in:isEnabled:)` + `hoverEffectGroup()`); Dwell Control settings path corrected (Interaction, not AssistiveTouch); Switch Control no longer conflated with Dwell Control.
+- **Full Keyboard Access description corrected** — it requires a hardware keyboard; what it extends is *reach* (all controls vs. text fields/lists).
+- **Added `UIFocusSystem.requestFocusUpdate(to:)`** as the direct programmatic-focus API alongside the `preferredFocusEnvironments` pattern (uikit-focus.md), replacing the "ONLY correct way" overstatement.
+- **Unverifiable WWDC citations removed** (macos-focus.md listed a WWDC21 session that doesn't exist and WWDC24 focus-ring content that couldn't be corroborated).
+- **Structure/metadata sync:** anti-patterns.md sections reordered to document order (#18–24 before #25–30; numbers unchanged — note the macOS patterns were renumbered from #15–21 to #18–24 back in v1.4.0), SKILL.md references index updated to "30 numbered anti-patterns", plugin.json/marketplace.json counts and versions synced, package.json gained name+version, openai.yaml/llms.txt now include macOS, CONTRIBUTING gained the missing macos-focus.md row and current OS version numbers.
+
 ## [1.7.1] - 2026-06-04
 
 ### Fixed

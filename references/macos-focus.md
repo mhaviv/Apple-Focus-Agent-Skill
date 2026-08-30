@@ -116,7 +116,7 @@ On macOS, `.focusable()` views participate in the Tab loop automatically.
 
 On macOS, `.activate` responds to Tab without requiring a system toggle (unlike iOS which requires "Keyboard Navigation" to be enabled).
 
-### defaultFocus(_:_:priority:) (macOS 14+)
+### defaultFocus(_:_:priority:) (macOS 13+)
 
 ```swift
 @FocusState var selectedField: Field?
@@ -125,7 +125,7 @@ VStack { ... }
     .defaultFocus($selectedField, .search, priority: .userInitiated)
 ```
 
-### .focusSection() (macOS 14+)
+### .focusSection() (macOS 13+)
 
 Groups focusable views for arrow key navigation within a section:
 
@@ -169,9 +169,11 @@ class MyView: NSView {
                      xRadius: 8, yRadius: 8).fill()
     }
 
-    // Tell AppKit when focus ring mask changes
-    override func noteFocusRingChanged() {
-        // Called when the ring needs to redraw
+    // When content that shapes the ring changes (e.g. an image swap that
+    // AppKit can't detect), CALL noteFocusRingMaskChanged() — it is not an
+    // override point. Resizes and needsDisplay are handled automatically.
+    func imageDidChange() {
+        noteFocusRingMaskChanged()
     }
 }
 ```
@@ -586,7 +588,7 @@ Forgetting that Mac Catalyst inherits iPad focus behavior. If your iPad app does
 | Focus indicator | Blue ring | Scale/highlight | Halo |
 | Primary input | Mouse + keyboard | Siri Remote | Touch |
 | focusedValue | Menu commands | N/A | Menu commands |
-| .focusSection() | macOS 14+ | tvOS 15+ | iOS 17+ |
+| .focusSection() | macOS 13+ | tvOS 15+ | Not available |
 | @FocusState | macOS 12+ | tvOS 15+ | iOS 15+ |
 | FKA toggle | System Settings | N/A | Settings > Accessibility |
 
@@ -646,8 +648,7 @@ Using `.focusable()` on a view that already has system focus support (like TextF
 
 | Session | Year | Key Content |
 |---------|------|-------------|
-| Support keyboard navigation in macOS | WWDC21 | Key view loop, focus ring customization |
 | Direct and reflect focus in SwiftUI | WWDC21 | @FocusState, focusedValue on macOS |
+| Focus on iPad keyboard navigation | WWDC21 | Focus groups and keyboard focus (informs Catalyst behavior) |
 | Bring your iOS app to the Mac | WWDC19 | Mac Catalyst focus behavior |
 | The SwiftUI cookbook for focus | WWDC23 | .focusable(interactions:), cross-platform focus |
-| What's new in AppKit | WWDC24 | Focus ring improvements, NSFocusRingPlacement updates |
