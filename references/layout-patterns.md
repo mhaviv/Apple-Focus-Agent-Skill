@@ -225,8 +225,8 @@ Pre-tvOS-18 form:
 
 ```swift
 TabView(selection: $selectedTab) {
-    HomeView().tabItem { Label("Home", systemImage: "house") }.tag(Tab.home)
-    ShowsView().tabItem { Label("Shows", systemImage: "tv") }.tag(Tab.shows)
+    HomeView().tabItem { Label("Home", systemImage: "house") }.tag(AppTab.home)
+    ShowsView().tabItem { Label("Shows", systemImage: "tv") }.tag(AppTab.shows)
 }
 ```
 

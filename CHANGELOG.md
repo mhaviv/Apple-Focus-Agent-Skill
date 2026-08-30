@@ -18,7 +18,7 @@ New-content release. Additions sourced from Apple documentation and release note
 - **`@FocusedObject` guard rails** (`ios-focus.md`, `macos-focus.md`): the API requires `ObservableObject`; `@Observable` models don't work with it — don't "modernize" that pattern.
 - **macOS 26/27 notes** (`macos-focus.md`): Tahoe glass appearance note; macOS 27 beta items (menu-bar/status-item keyboard navigation, `autorecalculatesKeyViewLoop`, `NSTextSelectionManager`) plus the WWDC26 "Modernize your AppKit app" session reference.
 - **SKILL.md "Toolchain status" block**: OS 26/27 added no new focus APIs and no deprecations; the 27 SDKs require the scene-based lifecycle (iOS/iPadOS/tvOS/visionOS/Catalyst); tvOS 27 adds Dynamic Type.
-- **Fixed (found in pre-release review):** the repo had referenced a nonexistent `recalculatesKeyViewLoop` NSWindow property since v1.3.0 — corrected to the real `autorecalculatesKeyViewLoop` in all six locations (SKILL.md, macos-focus.md, anti-patterns.md #22 area, debugging.md); the SDK-26 gesture-priority note now states the direction correctly (SwiftUI gestures now *yield* to existing UIKit/AppKit recognizers by default; `highPriorityGesture` to take precedence).
+- **Fixed (found in pre-release review):** the repo had referenced a nonexistent `recalculatesKeyViewLoop` NSWindow property since v1.3.0 — corrected to the real `autorecalculatesKeyViewLoop` in all six locations (SKILL.md, macos-focus.md, anti-patterns.md #19, debugging.md); the SDK-26 gesture-priority note now states the direction correctly (SwiftUI gestures now *yield* to existing UIKit/AppKit recognizers by default; `highPriorityGesture` to take precedence).
 
 ## [1.7.2] - 2026-08-30
 
