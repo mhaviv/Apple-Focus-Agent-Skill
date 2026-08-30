@@ -201,23 +201,19 @@ Used in custom ButtonStyles for visual feedback. See `references/focus-styling.m
 One-time programmatic focus on screen load, coordinated with layout completion:
 
 ```swift
-class AutoFocusManager: ObservableObject {
-    @Published var shouldAutoFocus = true
-    private let subject = PassthroughSubject<Void, Never>()
-    var publisher: AnyPublisher<Void, Never> { subject.eraseToAnyPublisher() }
-    private var hasTriggered = false
+@MainActor @Observable
+final class AutoFocusManager {
+    // Non-UI bookkeeping — @ObservationIgnored avoids body re-evaluation (see anti-pattern #27)
+    @ObservationIgnored private var hasTriggered = false
+    var focusRequest: Int = 0  // incremented once per screen appearance
 
     func trigger() {
-        guard shouldAutoFocus, !hasTriggered else { return }
-        subject.send()
+        guard !hasTriggered else { return }
         hasTriggered = true
-        shouldAutoFocus = false
+        focusRequest += 1
     }
 
-    func reset() {
-        shouldAutoFocus = true
-        hasTriggered = false
-    }
+    func reset() { hasTriggered = false }
 }
 
 // In parent view — trigger after layout completes:
@@ -225,8 +221,10 @@ class AutoFocusManager: ObservableObject {
     if complete { autoFocusManager.trigger() }
 }
 
-// In child view — receive and set focus:
-.onReceive(autoFocusManager.publisher) { _ in
+// In child view — react and set focus:
+.onChange(of: autoFocusManager.focusRequest) { _, _ in
     focusedField = .mainContent
 }
 ```
+
+`@MainActor` is explicit so the class compiles identically in modules with and without Swift 6.2's default MainActor isolation (in new Xcode 26 projects it's inferred). The Combine `ObservableObject` version of this pattern still works but re-evaluates every observing view on each `@Published` write.

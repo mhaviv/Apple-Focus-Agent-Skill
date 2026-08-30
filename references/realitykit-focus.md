@@ -51,9 +51,11 @@ entity.components.set(HoverEffectComponent())  // System default highlight
 
 ### Spotlight Effect (visionOS 2.0+)
 
+The style types are nested in `HoverEffectComponent`:
+
 ```swift
 entity.components.set(HoverEffectComponent(
-    .spotlight(SpotlightHoverEffectStyle(
+    .spotlight(HoverEffectComponent.SpotlightHoverEffectStyle(
         color: .white,
         strength: 1.0
     ))
@@ -62,36 +64,60 @@ entity.components.set(HoverEffectComponent(
 
 ### Shader Effect (visionOS 2.0+)
 
-For custom shader-driven hover, use `HoverState` in your `ShaderGraphMaterial`:
+For custom shader-driven hover, add the "Hover State" node to your `ShaderGraphMaterial` in Reality Composer Pro and pass `ShaderHoverEffectInputs` to the component:
 
 ```swift
-// In Reality Composer Pro:
-// 1. Add HoverState node to shader graph
-// 2. Connect HoverState.isActive output to material properties
-// 3. Use HoverState.position for localized effects (glow follows gaze point)
-
 let material = try await ShaderGraphMaterial(
     named: "/Root/HoverGlowMaterial",
     from: "Scene.usda"
 )
 entity.model?.materials = [material]
-entity.components.set(HoverEffectComponent(.shader(.default)))
+entity.components.set(HoverEffectComponent(.shader(
+    HoverEffectComponent.ShaderHoverEffectInputs(
+        fadeInDuration: 0.3, fadeOutDuration: 0.3
+    )
+)))
 ```
 
-`HoverState` provides:
-- `isActive` (Bool) — whether gaze is on the entity
-- `position` (float2) — UV coordinate of gaze point on entity surface
+The Shader Graph "Hover State" node outputs include Intensity, Position, and Time Since Hover Start — drive glow/parallax from those.
 
 ### Highlight Effect (visionOS 2.0+)
 
 ```swift
 entity.components.set(HoverEffectComponent(
-    .highlight(HighlightHoverEffectStyle(
+    .highlight(HoverEffectComponent.HighlightHoverEffectStyle(
         color: .systemBlue,
         strength: 0.8
     ))
 ))
 ```
+
+### Grouped Hover (HoverEffectComponent.GroupID)
+
+Entities sharing a `GroupID` activate their hover effects together, independent of hierarchy — the RealityKit analog of SwiftUI's `hoverEffectGroup()`:
+
+```swift
+let groupID = HoverEffectComponent.GroupID()
+
+var hoverA = HoverEffectComponent(.highlight(
+    HoverEffectComponent.HighlightHoverEffectStyle(color: .green, strength: 2.0)))
+hoverA.hoverEffect.groupID = groupID
+entityA.components.set(hoverA)
+
+var hoverB = HoverEffectComponent(.highlight(
+    HoverEffectComponent.HighlightHoverEffectStyle(color: .green, strength: 2.0)))
+hoverB.hoverEffect.groupID = groupID
+entityB.components.set(hoverB)
+// Hovering either entity lights both.
+```
+
+### Not just visionOS
+
+`HoverEffectComponent` is available on iOS 18+, iPadOS 18+, Mac Catalyst 18+, and macOS 15+ as well — there, "hover" means the mouse/trackpad pointer instead of gaze. The `InputTargetComponent` + `CollisionComponent` requirement is the same everywhere.
+
+### visionOS 26 input components (doc-sourced)
+
+visionOS 26 added two entity-level input components worth knowing when reviewing interaction code: `ManipulationComponent` (system-driven 6DOF hand-gesture move/rotate/scale) and `GestureComponent` (attach gestures directly to an entity instead of a SwiftUI gesture on the RealityView). Neither replaces the hover triad above — an entity still needs `InputTargetComponent` + `CollisionComponent` to be targetable.
 
 ## Gesture Handling on Entities
 

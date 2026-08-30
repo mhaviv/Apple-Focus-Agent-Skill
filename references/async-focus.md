@@ -34,22 +34,25 @@ struct ContentView: View {
 
 ```swift
 func loadAndFocus() {
+    // UIViewController is @MainActor, and Task {} inherits the creating
+    // context's isolation — so after the await, this code is back on the
+    // main actor. No MainActor.run wrapper is needed here.
     Task {
         let data = await fetchData()
-        
-        // BAD — may not be on main actor
-        // self.setNeedsFocusUpdate()
-        
-        // GOOD — explicitly dispatch to main
-        await MainActor.run {
-            self.dataSource.apply(data)
-            self.collectionView.layoutIfNeeded()
-            self.setNeedsFocusUpdate()
-            self.updateFocusIfNeeded()
-        }
+        self.dataSource.apply(data)
+        self.collectionView.layoutIfNeeded()
+        self.setNeedsFocusUpdate()
+        self.updateFocusIfNeeded()
     }
 }
 ```
+
+The genuinely dangerous case is `Task.detached` (or a plain `Task {}` created from a nonisolated context), which does NOT inherit main-actor isolation — see Common Mistakes below. Under Swift 6 language mode a focus/UI call from the wrong isolation is a **compile error**, not a silent runtime bug.
+
+### Swift 6.2 isolation notes
+
+- New Xcode 26 app projects default to **MainActor isolation for the whole module** (SE-0466 "approachable concurrency"), which makes explicit `@MainActor` annotations on focus coordinators redundant there. Existing projects keep nonisolated-by-default unless they opt in — keep the annotations in code that must compile in both worlds.
+- Under the 6.2 defaults, a `nonisolated async` helper runs on the *caller's* actor (SE-0461), so awaiting it from `@MainActor` focus code no longer hops threads. To deliberately push expensive work off the main actor before setting focus state, mark the function `@concurrent`.
 
 ## Focus After Data Load
 
@@ -422,4 +425,4 @@ Multiple `.task` modifiers on sibling views can complete in any order. Each may 
 Setting focus on a view that has already disappeared (task was not cancelled) causes no crash but wastes cycles and can cause brief visual artifacts.
 
 ### 5. Calling setNeedsFocusUpdate from background thread
-UIKit focus updates from a background thread silently fail. Always use `await MainActor.run { }` or `DispatchQueue.main.async { }`.
+UIKit focus updates must run on the main actor. Under Swift 6 language mode, calling them from nonisolated async code is a compile error; in older language modes they silently fail at runtime. Route the call through a `@MainActor` function (or `await MainActor.run { }` from legacy nonisolated code) — prefer structured isolation over `DispatchQueue.main.async`, which hides the problem from the compiler.

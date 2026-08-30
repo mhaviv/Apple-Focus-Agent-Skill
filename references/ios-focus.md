@@ -279,7 +279,7 @@ struct SelectedItemBindingKey: FocusedValueKey {
 
 ### @FocusedObject — Observable Objects
 
-For passing observable objects through focus:
+For passing observable objects through focus. Note: `@FocusedObject`/`focusedObject(_:)` **require `ObservableObject`** — an `@Observable` (Observation-framework) model does not work here, so don't "modernize" this pattern:
 
 ```swift
 class DocumentModel: ObservableObject {
@@ -320,6 +320,8 @@ class DocumentModel: ObservableObject {
 ## Game Controller Focus
 
 When a game controller (MFi, Xbox, PlayStation, etc.) is connected via Bluetooth, its directional pad drives the same `UIFocusSystem` as keyboard arrow keys.
+
+> Evidence: heuristic — controller-driven `UIFocusSystem` navigation is documented behavior on tvOS; this section extrapolates it to iOS/iPadOS and has not been device-verified there. Verify on hardware before relying on it in a review finding.
 
 ### How It Works
 

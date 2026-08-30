@@ -83,6 +83,26 @@ Button("No hover") { }
 
 Sets the default hover effect for a subtree. Children inherit unless overridden.
 
+## visionOS 26: Look to Scroll (doc-sourced)
+
+Gaze-driven scrolling is **opt-in** per scroll view. The `scrollInputBehavior(_:for:)` modifier exists since visionOS 2, but the `.look` input kind is visionOS 26+:
+
+```swift
+ScrollView {
+    ...
+}
+.scrollInputBehavior(.enabled, for: .look)  // ScrollInputKind.look — visionOS 26+
+```
+
+Review notes:
+- System apps enable it for content-browsing surfaces; it is NOT on by default in your app.
+- It composes with hover effects — gaze still highlights `hoverEffect()` views while scrolling.
+- `scrollDisabled(true)` wins over any per-input enablement.
+
+## Spatial accessories (visionOS 26, doc-sourced)
+
+visionOS 26 adds tracked spatial accessories (PlayStation VR2 Sense controller, Logitech Muse) with 6DOF input. These are a *pointer-class* input alongside gaze-and-pinch: they interact with the same `InputTargetComponent`/`CollisionComponent` surfaces. When reviewing input code, don't assume gaze is the only targeting path on visionOS anymore.
+
 ## RealityKit Entity Hover
 
 ### HoverEffectComponent (visionOS 1.0+)

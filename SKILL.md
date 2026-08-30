@@ -1,7 +1,7 @@
 ---
 name: swift-focusengine-pro
 description: Reviews, writes, and fixes focus management code for all Apple platforms (tvOS, iOS/iPadOS, watchOS, visionOS, macOS), covering SwiftUI, UIKit, AppKit, and RealityKit. Use when reading, writing, or reviewing apps that handle focus, hover, key view loops, or Digital Crown navigation.
-version: 1.7.2
+version: 1.8.0
 author: Michael Haviv
 tags:
   - swift
@@ -89,6 +89,11 @@ If doing a partial review, load only the relevant reference files.
 - Never add `.focusable()` to Buttons or NavigationLinks — they are already focusable. Adding it creates a double-focus wrapper.
 - Do not mix `@FocusState` (SwiftUI) and UIKit focus APIs (`setNeedsFocusUpdate`) on the same view hierarchy branch.
 - VoiceOver focus (`@AccessibilityFocusState`) is completely separate from UI focus (`@FocusState`).
+
+### Toolchain status (as of Xcode 27 beta, Aug 2026)
+- OS 26 and the OS 27 betas added **no new focus APIs and no focus deprecations**. What changed around focus: Liquid Glass alters focused-control appearance on tvOS 26 (4K 2nd gen+ only — older devices keep pre-glass visuals), `ControlSize` works on tvOS 26+, `.sidebarAdaptable` TabView (tvOS 18+) moves the tab region to a leading sidebar, and visionOS 26 adds opt-in gaze scrolling (`.scrollInputBehavior(.enabled, for: .look)`).
+- The 27 SDKs **require the scene-based lifecycle** (apps fail to launch without it) and tvOS 27 adds Dynamic Type — both affect focus sample scaffolding and sizing, not focus APIs.
+- Swift 6.2: new Xcode 26 projects default to module-wide MainActor isolation; keep explicit `@MainActor` in examples that must compile in both worlds (see `references/async-focus.md`).
 
 
 ## Output Format
