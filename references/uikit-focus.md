@@ -88,7 +88,15 @@ Animation targeting rules:
 
 ### Programmatic focus updates
 
-The ONLY correct way to move focus programmatically in UIKit:
+Two supported ways to move focus programmatically in UIKit. The direct one is `UIFocusSystem.requestFocusUpdate(to:)` (iOS/tvOS 15+):
+
+```swift
+if let focusSystem = UIFocusSystem.focusSystem(for: view) {
+    focusSystem.requestFocusUpdate(to: targetView)
+}
+```
+
+The environment-driven pattern below is preferred when the target depends on view-controller state (it keeps `preferredFocusEnvironments` truthful, which also serves system-initiated updates — see anti-pattern #30):
 
 ```swift
 // 1. Store desired target

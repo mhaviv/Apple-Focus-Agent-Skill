@@ -1,6 +1,12 @@
 {
-  "keywords": ["pi-package"],
+  "name": "swift-focusengine-pro",
+  "version": "1.7.2",
+  "keywords": [
+    "pi-package"
+  ],
   "pi": {
-    "skills": ["."]
+    "skills": [
+      "."
+    ]
   }
 }

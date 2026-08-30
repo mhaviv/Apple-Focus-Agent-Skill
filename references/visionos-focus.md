@@ -48,17 +48,16 @@ Custom effects are **precomputed at view creation** and executed by the system c
 Coordinates multiple hover effects to activate together:
 
 ```swift
-@Namespace var hoverGroup
-
 HStack {
     Image(systemName: "star")
-        .hoverEffect(in: HoverEffectGroup(hoverGroup))
+        .hoverEffect(.highlight, in: group)   // hoverEffect(_:in:isEnabled:) — effect + group
     Text("Favorite")
-        .hoverEffect(in: HoverEffectGroup(hoverGroup))
+        .hoverEffect(.highlight, in: group)
 }
+.hoverEffectGroup()  // or: .hoverEffectGroup(id:in:behavior:) with a @Namespace for cross-container groups
 ```
 
-Looking at *any* view in the group activates all views' effects simultaneously.
+Looking at *any* view in the group activates all views' effects simultaneously. Note the real signatures: `hoverEffect(_:in:isEnabled:)` takes the effect first, and `hoverEffectGroup()` / `hoverEffectGroup(id:in:behavior:)` declare the group — there is no bare `.hoverEffect(in:)` overload without an effect or trailing closure.
 
 ### .contentShape(.hoverEffect, shape)
 
@@ -80,7 +79,7 @@ Button("No hover") { }
     .hoverEffectDisabled(true)
 ```
 
-### .defaultHoverEffect() (visionOS 2.0+)
+### .defaultHoverEffect() (visionOS 1.0+)
 
 Sets the default hover effect for a subtree. Children inherit unless overridden.
 
@@ -185,7 +184,7 @@ Alternative targeting instead of eyes:
 
 ### Dwell Control
 Interact by looking at control for set duration (no pinch needed):
-- Settings > Accessibility > AssistiveTouch > Dwell Control
+- Settings > Accessibility > Interaction > Dwell Control
 
 ### Switch Control
 Works with external switches. RealityKit entities need accessibility properties.

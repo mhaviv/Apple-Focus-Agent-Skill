@@ -366,7 +366,7 @@ Imperative `ScrollViewReader.scrollTo()` inside `onChange(of: focusedItem)` crea
 3. Focus engine recalculates → finds new nearest item → focus moves
 4. Goto 1
 
-**Fix:** Replace `ScrollViewReader` with declarative `ScrollPosition` (tvOS 17+):
+**Fix:** Replace `ScrollViewReader` with declarative `ScrollPosition` (tvOS 18+, iOS 18+):
 
 ```swift
 // BAD — imperative scrollTo fights the focus engine
@@ -386,15 +386,18 @@ ScrollViewReader { proxy in
 @State private var scrollPosition = ScrollPosition(idType: String.self)
 
 ScrollView {
-    ForEach(items) { item in
-        Button(item.title) { }
-            .focused($focusedItem, equals: item.id)
+    LazyVStack {
+        ForEach(items) { item in
+            Button(item.title) { }
+                .focused($focusedItem, equals: item.id)
+        }
     }
+    .scrollTargetLayout()  // required for id-based ScrollPosition tracking
 }
 .scrollPosition($scrollPosition)
 ```
 
-If `ScrollViewReader` is required (e.g., tvOS 16 support), disable animation on programmatic scrolls and use a debounce:
+If `ScrollViewReader` is required (any deployment target below tvOS 18), disable animation on programmatic scrolls and use a debounce:
 
 ```swift
 .onChange(of: focusedItem) { _, new in

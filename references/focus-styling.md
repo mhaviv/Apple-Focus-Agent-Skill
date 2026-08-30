@@ -81,7 +81,7 @@ struct FocusBorder: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .cornerRadius(cornerRadius)
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
             .overlay {
                 if isFocused {
                     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
@@ -166,20 +166,10 @@ override func prepareForReuse() {
 
 ## clipsToBounds considerations
 
-When cells scale up on focus, content clips if `clipsToBounds = true`. Set `clipsToBounds = false` on the cell and its contentView, or use a SwiftUI helper:
+When cells scale up on focus, content clips if `clipsToBounds = true`.
 
-```swift
-extension View {
-    func clipsToBoundsDisabled() -> some View {
-        self.background(
-            GeometryReader { _ in
-                Color.clear
-                    .preference(key: ClipsToBoundsKey.self, value: false)
-            }
-        )
-    }
-}
-```
+- **UIKit:** set `clipsToBounds = false` on the cell AND its `contentView` (both clip independently), and leave enough inter-item spacing for the scaled frame.
+- **SwiftUI:** there is no clipsToBounds toggle — avoid `.clipped()` and fixed-size ancestors around focus-scaling content, and give rows headroom (padding on the container) so the 1.13x scale isn't cut off by a scroll view edge. Raise the focused card with `.zIndex(1)` if neighbors overlap it.
 
 ## macOS Focus Ring Styling
 
@@ -214,9 +204,11 @@ class CircularAvatarView: NSView {
         path.fill()
     }
 
-    // Notify AppKit when the mask shape changes (e.g., resize)
-    override func noteFocusRingChanged() {
-        super.noteFocusRingChanged()
+    // If content that shapes the ring changes in a way AppKit can't detect
+    // (e.g., the avatar image is swapped), CALL noteFocusRingMaskChanged().
+    // Resizes and needsDisplay re-evaluate the mask automatically.
+    func avatarDidChange() {
+        noteFocusRingMaskChanged()
     }
 }
 ```
@@ -227,7 +219,7 @@ class CircularAvatarView: NSView {
 class CustomStyledView: NSView {
     override var focusRingType: NSFocusRingType { .none }
 
-    override func drawRect(_ dirtyRect: NSRect) {
+    override func draw(_ dirtyRect: NSRect) {
         // Draw custom focus indicator when focused
         if window?.firstResponder === self {
             NSColor.controlAccentColor.setStroke()

@@ -100,7 +100,7 @@ HStack { /* left-aligned pills */ }
 
 ## prefersDefaultFocus(_:in:) + focusScope(_:)
 
-Controls which view gets focus by default within a namespace scope. tvOS and watchOS only.
+Controls which view gets focus by default within a namespace scope. macOS 12+, tvOS 14+, watchOS 7+ (not iOS).
 
 ```swift
 @Namespace private var namespace
@@ -121,7 +121,7 @@ VStack {
 Rules:
 - `focusScope(namespace)` MUST be on an ancestor of views using `prefersDefaultFocus`
 - `resetFocus(in:)` re-evaluates preferences and moves focus
-- Does NOT work inside ScrollView — use `defaultFocus` instead
+- Does NOT work inside ScrollView — use `defaultFocus` instead (but see anti-pattern #28: `defaultFocus` with `.userInitiated` seeds initial appearance only, not re-entry)
 
 ## defaultFocus(_:_:priority:)
 
@@ -188,12 +188,12 @@ Read-only focus state. Returns true if nearest focusable ancestor is focused.
 
 Used in custom ButtonStyles for visual feedback. See `references/focus-styling.md`.
 
-## Hover Effects (tvOS 17+)
+## Hover Effects
 
 ```swift
-.hoverEffect(.lift)       // Default for Buttons — lifts the view
-.hoverEffect(.highlight)  // Adds perspective shift + specular shine (great for artwork)
-.focusEffectDisabled()     // Disables default focus appearance
+.hoverEffect(.lift)       // tvOS 16+ — default for Buttons; lifts the view
+.hoverEffect(.highlight)  // tvOS 16+ — perspective shift + specular shine (great for artwork)
+.focusEffectDisabled()    // tvOS 17+ — disables default focus appearance
 ```
 
 ## AutoFocus Pattern
