@@ -2,6 +2,8 @@
 
 These are critical mistakes that break focus navigation. Flag any occurrence immediately. Patterns 1-17 are the original tvOS patterns. Patterns 18-24 are macOS-specific. Patterns 25-30 are production tvOS patterns discovered during large-scale media-app development.
 
+**Evidence labels.** Rules based on the Apple API contract carry no label. Rules based on observed behavior carry a one-line label, e.g. `> Evidence: verified production behavior (tvOS 18, Apple TV 4K + HD, 2026)` — these can diverge from what the docs imply, which is exactly why they're recorded. Re-verify labeled rules on new OS releases before assuming they still hold.
+
 ## Blocking (must fix before ship)
 
 ### 1. Using `.disabled()` to toggle interactivity on tvOS
@@ -219,6 +221,8 @@ Workaround: Use `@FocusState` + `defaultFocus(_:_:priority:)` or set focus progr
 
 `LazyVStack` and `LazyVGrid` inside `ScrollView` have severe lag on tvOS 18 (Apple TV HD). Consider using `List` or a custom List-based grid instead.
 
+> Evidence: verified production behavior (tvOS 18, Apple TV HD, 2026) — not documented by Apple. Re-verify on tvOS 26+ and newer hardware.
+
 ### 15. `LazyVStack` deallocates offscreen rows — focus escapes to tab bar
 
 This is the most dangerous `LazyVStack` issue on tvOS. When you scroll down, `LazyVStack` removes offscreen rows from the view hierarchy. When you swipe up quickly, the focus engine does a geometric search upward, finds no focusable views (they've been deallocated), and jumps straight to the tab bar — skipping all your content.
@@ -335,7 +339,7 @@ buttonB.nextKeyView = buttonC
 buttonC.nextKeyView = textField
 ```
 
-Alternative: Set `window.recalculatesKeyViewLoop = true` and let the system manage the loop geometrically. But never mix manual `nextKeyView` with `recalculatesKeyViewLoop`.
+Alternative: Set `window.autorecalculatesKeyViewLoop = true` and let the system manage the loop geometrically. But never mix manual `nextKeyView` with `autorecalculatesKeyViewLoop`.
 
 ### 20. Calling `becomeFirstResponder()` directly
 
@@ -414,6 +418,8 @@ Button("Save") { document?.save() }
 ```
 
 ## Production tvOS Anti-Patterns (added v1.5.0–v1.6.0)
+
+> Evidence for #25–30: verified production behavior from large-scale tvOS media-app development (tvOS 17/18, Apple TV 4K + HD, 2026), each reproduced during fixes.
 
 ### 25. `.disabled()` on multiple list/sidebar items with active selection state
 
@@ -514,6 +520,8 @@ This is especially critical in focus callbacks (`onChange(of: focusedItem)`) whe
 ### 28. `defaultFocus` with `.userInitiated` only fires on initial appearance
 
 `.defaultFocus($focusedItem, firstItem, priority: .userInitiated)` only evaluates when the focus branch first appears — NOT on every re-entry. If focus leaves (e.g., to nav bar) and returns, `defaultFocus` does NOT redirect focus to the desired item.
+
+> Evidence: verified production behavior (tvOS, 2026, reproduced in a standalone demo). Note the API docs read as if `.userInitiated` also covers "user-driven focus navigation" — observed tvOS behavior is initial-appearance only. An agent reasoning from the docs alone will get this wrong; trust the observed behavior and use the anti-pattern #25 gating pattern for re-entry.
 
 ```swift
 // BAD — expects defaultFocus to redirect on every re-entry

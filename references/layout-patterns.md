@@ -210,12 +210,32 @@ override func didUpdateFocus(in context: UIFocusUpdateContext, ...) {
 
 ### SwiftUI
 
+tvOS 18+ uses the `Tab` builder (`.tabItem` is soft-deprecated since iOS/tvOS 18). Name your selection enum something other than `Tab` — a type named `Tab` shadows `SwiftUI.Tab` and the builder stops resolving:
+
 ```swift
+enum AppTab { case home, shows }
+
 TabView(selection: $selectedTab) {
-    HomeView().tabItem { Label("Home", systemImage: "house") }.tag(Tab.home)
-    ShowsView().tabItem { Label("Shows", systemImage: "tv") }.tag(Tab.shows)
+    Tab("Home", systemImage: "house", value: AppTab.home) { HomeView() }
+    Tab("Shows", systemImage: "tv", value: AppTab.shows) { ShowsView() }
 }
 ```
+
+Pre-tvOS-18 form:
+
+```swift
+TabView(selection: $selectedTab) {
+    HomeView().tabItem { Label("Home", systemImage: "house") }.tag(AppTab.home)
+    ShowsView().tabItem { Label("Shows", systemImage: "tv") }.tag(AppTab.shows)
+}
+```
+
+### `.sidebarAdaptable` (tvOS 18+) changes tab focus geometry
+
+`.tabViewStyle(.sidebarAdaptable)` always renders a **sidebar** on tvOS (top tab bar on iPadOS, bottom bar on iOS). Focus review implications:
+
+- Focus enters/leaves the tab region from the **leading edge**, not the top — anti-patterns #15/#16 ("focus escapes to tab bar" via Up) become "escapes via Left" in this layout; the same `.focusSection()` reasoning applies to the leading column of content.
+- The sidebar collapses/expands with focus, shifting content geometry mid-navigation — retest any pixel-tuned `focusSection` frames after adopting it.
 
 For custom tab bar (collapsible side tab bar pattern):
 - Wrap tab buttons in `.focusSection()`

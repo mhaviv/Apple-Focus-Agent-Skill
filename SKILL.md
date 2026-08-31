@@ -1,7 +1,7 @@
 ---
 name: swift-focusengine-pro
 description: Reviews, writes, and fixes focus management code for all Apple platforms (tvOS, iOS/iPadOS, watchOS, visionOS, macOS), covering SwiftUI, UIKit, AppKit, and RealityKit. Use when reading, writing, or reviewing apps that handle focus, hover, key view loops, or Digital Crown navigation.
-version: 1.7.2
+version: 1.8.0
 author: Michael Haviv
 tags:
   - swift
@@ -79,7 +79,7 @@ If doing a partial review, load only the relevant reference files.
 ### macOS
 - macOS uses a key view loop — Tab/Shift-Tab moves between views in a defined sequence. This is NOT spatial like tvOS.
 - Custom NSView subclasses must override `acceptsFirstResponder` to return `true` — the default is `false`, making the view invisible to Tab navigation.
-- `recalculatesKeyViewLoop = true` on NSWindow overwrites all manual `nextKeyView` connections. Pick one approach.
+- `autorecalculatesKeyViewLoop = true` on NSWindow overwrites all manual `nextKeyView` connections. Pick one approach.
 - Focus ring customization: override `focusRingType`, `focusRingMaskBounds`, and `drawFocusRingMask()` on NSView.
 - `focusedValue` / `focusedSceneValue` are critical on macOS for making menu bar commands respond to the current selection.
 - Mac Catalyst: inherits iPad `UIFocusSystem`. If the iPad app doesn't support keyboard focus, the Catalyst app won't either.
@@ -89,6 +89,11 @@ If doing a partial review, load only the relevant reference files.
 - Never add `.focusable()` to Buttons or NavigationLinks — they are already focusable. Adding it creates a double-focus wrapper.
 - Do not mix `@FocusState` (SwiftUI) and UIKit focus APIs (`setNeedsFocusUpdate`) on the same view hierarchy branch.
 - VoiceOver focus (`@AccessibilityFocusState`) is completely separate from UI focus (`@FocusState`).
+
+### Toolchain status (as of Xcode 27 beta, Aug 2026)
+- OS 26 added exactly **one** new focus API — `accessibilityDefaultFocus(_:_:)` (SwiftUI, all platforms 26.0+, sets default VoiceOver focus; see `references/accessibility-focus.md`) — and **no focus deprecations**; the OS 27 betas add none. Verified by scanning the installed 26.5 SDK interfaces for all five platforms, not just release notes. What else changed around focus: Liquid Glass alters focused-control appearance on tvOS 26 (4K 2nd gen+ only — older devices keep pre-glass visuals), `ControlSize` works on tvOS 26+, `.sidebarAdaptable` TabView (tvOS 18+) moves the tab region to a leading sidebar, and visionOS 26 adds opt-in gaze scrolling (`.scrollInputBehavior(.enabled, for: .look)`).
+- The 27 SDKs **require the scene-based lifecycle** on iOS/iPadOS/tvOS/visionOS/Mac Catalyst (apps fail to launch without it; macOS and watchOS are unaffected), and tvOS 27 adds Dynamic Type — both affect focus sample scaffolding and sizing, not focus APIs.
+- Swift 6.2: new Xcode 26 projects default to module-wide MainActor isolation; keep explicit `@MainActor` in examples that must compile in both worlds (see `references/async-focus.md`).
 
 
 ## Output Format

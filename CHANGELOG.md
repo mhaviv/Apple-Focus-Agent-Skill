@@ -2,6 +2,25 @@
 
 All notable changes to Swift FocusEngine Pro are documented here.
 
+## [1.8.0] - 2026-08-30
+
+### Added — OS 26 coverage, Swift 6.2 modernization, evidence labels
+
+New-content release. Additions sourced from Apple documentation and release notes are labeled **doc-sourced** (not yet production-verified); no existing anti-pattern substance changed.
+
+- **Evidence-label convention** (`anti-patterns.md` preamble): rules from the Apple API contract carry no label; rules from observed behavior carry a one-line `> Evidence:` label with platform/date. Labels added to #14 (Apple TV HD lag), #25–30 (production section), and the iOS game-controller section (Apple-documented: UIKit's Focus-based navigation collection lists game controllers as a focus input; exact button mappings remain device-verify).
+- **Anti-pattern #28 strengthened**: documents that the `defaultFocus` API docs read as if `.userInitiated` covers user-driven navigation, while observed tvOS behavior is initial-appearance only — trust the observed behavior.
+- **visionOS 26** (`visionos-focus.md`): opt-in gaze scrolling — `.scrollInputBehavior(.enabled, for: .look)` (`ScrollInputKind.look`, visionOS 26+); spatial accessories (PSVR2 Sense, Logitech Muse) as a pointer-class input alongside gaze.
+- **RealityKit** (`realitykit-focus.md`): corrected nested style type names (`HoverEffectComponent.SpotlightHoverEffectStyle` etc.), real `ShaderHoverEffectInputs` shader signature and Shader Graph "Hover State" node outputs; new `HoverEffectComponent.GroupID` grouped-hover section; multi-platform availability note (iOS 18+/macOS 15+, pointer hover); visionOS 26 `ManipulationComponent`/`GestureComponent` overview.
+- **tvOS 18+ TabView** (`layout-patterns.md`): `Tab` builder syntax (`.tabItem` soft-deprecated since 18), and `.sidebarAdaptable` focus-geometry implications (tab region moves to leading sidebar; #15/#16 escape direction changes).
+- **tvOS 26 / Liquid Glass** (`focus-styling.md`): focused-control glass appearance, the Apple TV 4K (1st gen)/HD device-matrix caveat, `ControlSize` on tvOS 26+, the SDK-26 gesture-priority change, and a note to re-verify the 1.13x scale table on tvOS 26.
+- **Swift 6.2 concurrency** (`async-focus.md`, `swiftui-focus.md`): UIKit async example rewritten around `Task {}` isolation inheritance (the `MainActor.run` wrapper was redundant from `@MainActor` contexts); new "Swift 6.2 isolation notes" (default MainActor isolation in new Xcode 26 projects, `nonisolated(nonsending)`, `@concurrent`); `AutoFocusManager` rewritten as `@MainActor @Observable` with `@ObservationIgnored` bookkeeping; background-thread guidance now prefers compiler-checked isolation over `DispatchQueue.main.async`.
+- **`@FocusedObject` guard rails** (`ios-focus.md`, `macos-focus.md`): the API requires `ObservableObject`; `@Observable` models don't work with it — don't "modernize" that pattern.
+- **macOS 26/27 notes** (`macos-focus.md`): Tahoe glass appearance note; macOS 27 beta items (menu-bar/status-item keyboard navigation, `autorecalculatesKeyViewLoop`, `NSTextSelectionManager`) plus the WWDC26 "Modernize your AppKit app" session reference.
+- **New API: `accessibilityDefaultFocus(_:_:)`** (`accessibility-focus.md`) — the one focus API OS 26 added (all platforms 26.0+; default VoiceOver focus via `AccessibilityFocusState`). Found by scanning the installed 26.5 SDK swiftinterfaces across all five platforms — release-notes sweeps had missed it. That scan also upgrades the "no other new focus APIs, no deprecations in OS 26" claim from release-notes-supported to SDK-verified.
+- **SKILL.md "Toolchain status" block**: OS 26 added exactly one focus API (above) and no deprecations; the 27 betas add none; the 27 SDKs require the scene-based lifecycle (iOS/iPadOS/tvOS/visionOS/Catalyst); tvOS 27 adds Dynamic Type.
+- **Fixed (found in pre-release review):** the repo had referenced a nonexistent `recalculatesKeyViewLoop` NSWindow property since v1.3.0 — corrected to the real `autorecalculatesKeyViewLoop` in all six locations (SKILL.md, macos-focus.md, anti-patterns.md #19, debugging.md); the SDK-26 gesture-priority note now states the direction correctly (SwiftUI gestures now *yield* to existing UIKit/AppKit recognizers by default; `highPriorityGesture` to take precedence).
+
 ## [1.7.2] - 2026-08-30
 
 ### Fixed — correctness pass, verified against live Apple documentation
