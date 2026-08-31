@@ -607,6 +607,8 @@ proxy.scrollTo(id, anchor: UnitPoint(x: 0.5, y: 0.7))
 
 ## Focus Scale Matching (tvOS)
 
+> Evidence: simulator-measured on tvOS 26.4 (2026-08-30) — SwiftUI `.card` button renders 300×200pt content at 340×226 when focused (1.133x/1.130x), confirming the ~1.13x factor is unchanged on tvOS 26. Hardware rendering may differ slightly; re-measure on device for pixel-critical matching.
+
 UIKit apps typically use `adjustsImageWhenAncestorFocused` which applies ~1.13x scale with parallax. SwiftUI `scaleEffect` should match:
 
 | Element | UIKit (Flagship) | SwiftUI (Recommended) |

@@ -121,7 +121,7 @@ OS 26 introduced no new focus APIs, but Liquid Glass changes what *focused* look
 - System controls (including `.glass` button styles and standard tab/sidebar chrome) render focus with glass treatments on tvOS 26. Custom ButtonStyles built to visually match tvOS ≤18 system focus (scale + shadow) may now look out of place next to system chrome — compare on-device before shipping.
 - **Device matrix caveat:** Apple's tvOS 26 release notes state the design updates are NOT carried forward to Apple TV 4K (1st gen) and older — the same app shows pre-glass focus visuals there. Test both looks.
 - `ControlSize` works on tvOS starting with tvOS 26 (`.controlSize(_:)`, environment value) — focused-control sizing can now vary by control size, which affects scale-matching math.
-- Re-verify any hard-coded focus scale constants (e.g., the 1.13x table in layout-patterns.md, measured on tvOS ≤18) against tvOS 26 system behavior before relying on them for pixel matching.
+- The 1.13x focus scale (see the table in layout-patterns.md) is confirmed unchanged on tvOS 26 — simulator-measured 1.133x on tvOS 26.4 with the `.card` style. Re-measure on device only for pixel-critical matching.
 - Apps built with the 26 SDKs also change SwiftUI-vs-UIKit **gesture priority**: SwiftUI gestures now yield to a view's existing `UIGestureRecognizer`s/`NSGestureRecognizer`s by default (previously they didn't). Use `highPriorityGesture(_:isEnabled:)` when your SwiftUI gesture must take precedence, or `simultaneousGesture(_:isEnabled:)` to run both — relevant wherever remote gestures and focus interactions coexist.
 
 ## UIKit Focus Animations

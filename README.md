@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/macOS-12+-000000?logo=apple" />
   <img src="https://img.shields.io/badge/Swift-5.9+-F05138?logo=swift&logoColor=white" />
   <img src="https://img.shields.io/badge/License-MIT-blue" />
-  <img src="https://img.shields.io/badge/version-1.8.0-brightgreen" />
+  <img src="https://img.shields.io/badge/version-1.8.1-brightgreen" />
 </p>
 
 <p align="center">
