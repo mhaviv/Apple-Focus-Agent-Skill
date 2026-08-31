@@ -2,6 +2,11 @@
 
 All notable changes to Swift FocusEngine Pro are documented here.
 
+## [1.8.1] - 2026-08-30
+
+### Verified
+- **1.13x focus scale confirmed on tvOS 26** — measured in the tvOS 26.4 simulator: a SwiftUI `.card` button's 300×200pt content renders at 340×226 when focused (1.133x width / 1.130x height). The scale-matching table in `layout-patterns.md` now carries a simulator-measured evidence label instead of a "re-verify on tvOS 26" caveat; device re-measurement recommended only for pixel-critical work.
+
 ## [1.8.0] - 2026-08-30
 
 ### Added — OS 26 coverage, Swift 6.2 modernization, evidence labels
